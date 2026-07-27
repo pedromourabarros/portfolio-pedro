@@ -50,11 +50,13 @@ export const metadata: Metadata = {
     title: `${personal.nome} — ${personal.cargo}`,
     description,
     siteName: `${personal.nome} · Portfólio`,
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: `${personal.nome} — ${personal.cargo}` }],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${personal.nome} — ${personal.cargo}`,
     description,
+    images: ['/og.png'],
   },
   robots: {
     index: true,

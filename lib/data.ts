@@ -286,6 +286,50 @@ export const formacao = [
   },
 ]
 
+/* ----------------------------------------------------------------
+   Dashboard BI — dados ilustrativos (KPIs, séries e composições)
+   Demonstram o tipo de análise que o Pedro entrega no dia a dia.
+------------------------------------------------------------------- */
+export const dashboardKpis = [
+  { label: "Receita analisada", valor: 4.18, prefixo: "R$ ", sufixo: "M", delta: 12.4, positivo: true },
+  { label: "Volume processado", valor: 29.4, sufixo: "K", delta: 8.1, positivo: true },
+  { label: "Ticket médio", valor: 142, prefixo: "R$ ", sufixo: "", delta: -2.1, positivo: false },
+  { label: "Taxa de conversão", valor: 6.8, sufixo: "%", delta: 3.6, positivo: true },
+]
+
+// Série anual: receita realizada x meta
+export const dashboardReceita = [
+  { mes: "Jan", receita: 2.9, meta: 3.1 },
+  { mes: "Fev", receita: 3.2, meta: 3.2 },
+  { mes: "Mar", receita: 3.0, meta: 3.3 },
+  { mes: "Abr", receita: 3.6, meta: 3.4 },
+  { mes: "Mai", receita: 3.4, meta: 3.5 },
+  { mes: "Jun", receita: 3.9, meta: 3.6 },
+  { mes: "Jul", receita: 4.1, meta: 3.7 },
+  { mes: "Ago", receita: 3.8, meta: 3.8 },
+  { mes: "Set", receita: 4.18, meta: 3.9 },
+  { mes: "Out", receita: 4.4, meta: 4.0 },
+  { mes: "Nov", receita: 4.7, meta: 4.2 },
+  { mes: "Dez", receita: 5.1, meta: 4.4 },
+]
+
+// Receita por região (barras)
+export const dashboardRegioes = [
+  { regiao: "Sudeste", valor: 1.72 },
+  { regiao: "Sul", valor: 0.94 },
+  { regiao: "Nordeste", valor: 0.78 },
+  { regiao: "Centro-Oeste", valor: 0.46 },
+  { regiao: "Norte", valor: 0.28 },
+]
+
+// Composição do portfólio (donut)
+export const dashboardCategorias = [
+  { categoria: "Crédito", valor: 38, fill: "var(--color-credito)" },
+  { categoria: "Investimentos", valor: 27, fill: "var(--color-investimentos)" },
+  { categoria: "Seguros", valor: 21, fill: "var(--color-seguros)" },
+  { categoria: "Cartões", valor: 14, fill: "var(--color-cartoes)" },
+]
+
 export const navLinks = [
   { href: "#sobre", label: "Sobre" },
   { href: "#experiencia", label: "Experiência" },
