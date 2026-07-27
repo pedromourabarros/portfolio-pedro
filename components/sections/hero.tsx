@@ -137,6 +137,7 @@ export function Hero() {
           >
             <a
               href="#projetos"
+              data-cursor-label="Explorar"
               className="group inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.03] active:scale-95"
             >
               Ver projetos
@@ -144,6 +145,7 @@ export function Hero() {
             </a>
             <a
               href="#pedrogpt"
+              data-cursor-label="Conversar"
               className="group inline-flex items-center gap-2 rounded-xl border border-border bg-secondary/40 px-5 py-3 text-sm font-medium text-foreground backdrop-blur transition-colors hover:bg-secondary"
             >
               <Sparkles className="size-4 text-primary" />

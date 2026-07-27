@@ -1,4 +1,6 @@
 import { AuroraBackground } from "@/components/aurora-background"
+import { CustomCursor } from "@/components/custom-cursor"
+import { ScrollProgress } from "@/components/scroll-progress"
 import { Navbar } from "@/components/navbar"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { Hero } from "@/components/sections/hero"
@@ -14,6 +16,8 @@ export default function Page() {
   return (
     <SmoothScroll>
       <span id="top" className="sr-only" />
+      <CustomCursor />
+      <ScrollProgress />
       <AuroraBackground />
       <Navbar />
       <main>
