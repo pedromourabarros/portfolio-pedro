@@ -316,44 +316,54 @@ export const formacao = [
    Dashboard BI — dados ilustrativos (KPIs, séries e composições)
    Demonstram o tipo de análise que o Pedro entrega no dia a dia.
 ------------------------------------------------------------------- */
+// KPIs executivos (formatados como cartões de leitura rápida)
 export const dashboardKpis = [
-  { label: "Receita analisada", valor: 4.18, prefixo: "R$ ", sufixo: "M", delta: 12.4, positivo: true },
-  { label: "Volume processado", valor: 29.4, sufixo: "K", delta: 8.1, positivo: true },
-  { label: "Ticket médio", valor: 142, prefixo: "R$ ", sufixo: "", delta: -2.1, positivo: false },
-  { label: "Taxa de conversão", valor: 6.8, sufixo: "%", delta: 3.6, positivo: true },
+  { label: "Receita acumulada", valor: "R$ 67.240.000", delta: 90.8, positivo: true, nota: "no período" },
+  { label: "Atingimento de meta", valor: "117,7%", delta: 17.7, positivo: true, nota: "vs. meta" },
+  { label: "Ticket médio", valor: "R$ 306", delta: 8.4, positivo: true, nota: "vs. período anterior" },
+  { label: "Atendimentos", valor: "22.020", delta: 12.6, positivo: true, nota: "vs. período anterior" },
 ]
 
-// Série anual: receita realizada x meta
+// Série anual: receita realizada x meta (R$ milhões)
 export const dashboardReceita = [
-  { mes: "Jan", receita: 2.9, meta: 3.1 },
-  { mes: "Fev", receita: 3.2, meta: 3.2 },
-  { mes: "Mar", receita: 3.0, meta: 3.3 },
-  { mes: "Abr", receita: 3.6, meta: 3.4 },
-  { mes: "Mai", receita: 3.4, meta: 3.5 },
-  { mes: "Jun", receita: 3.9, meta: 3.6 },
-  { mes: "Jul", receita: 4.1, meta: 3.7 },
-  { mes: "Ago", receita: 3.8, meta: 3.8 },
-  { mes: "Set", receita: 4.18, meta: 3.9 },
-  { mes: "Out", receita: 4.4, meta: 4.0 },
-  { mes: "Nov", receita: 4.7, meta: 4.2 },
-  { mes: "Dez", receita: 5.1, meta: 4.4 },
+  { mes: "Jan", receita: 4.2, meta: 4.0 },
+  { mes: "Fev", receita: 4.5, meta: 4.2 },
+  { mes: "Mar", receita: 4.4, meta: 4.4 },
+  { mes: "Abr", receita: 5.1, meta: 4.6 },
+  { mes: "Mai", receita: 5.0, meta: 4.8 },
+  { mes: "Jun", receita: 5.6, meta: 5.0 },
+  { mes: "Jul", receita: 5.9, meta: 5.2 },
+  { mes: "Ago", receita: 5.7, meta: 5.4 },
+  { mes: "Set", receita: 6.3, meta: 5.6 },
+  { mes: "Out", receita: 6.8, meta: 5.8 },
+  { mes: "Nov", receita: 7.2, meta: 6.0 },
+  { mes: "Dez", receita: 7.9, meta: 6.2 },
 ]
 
-// Receita por região (barras)
+// Receita por região (barras verticais — R$ milhões)
 export const dashboardRegioes = [
-  { regiao: "Sudeste", valor: 1.72 },
-  { regiao: "Sul", valor: 0.94 },
-  { regiao: "Nordeste", valor: 0.78 },
-  { regiao: "Centro-Oeste", valor: 0.46 },
-  { regiao: "Norte", valor: 0.28 },
+  { regiao: "Sudeste", valor: 5.9 },
+  { regiao: "Sul", valor: 1.7 },
+  { regiao: "Nordeste", valor: 1.3 },
+  { regiao: "Centro-Oeste", valor: 1.0 },
+  { regiao: "Norte", valor: 0.6 },
 ]
 
-// Composição do portfólio (donut)
+// Mix por canal (donut — participação percentual)
 export const dashboardCategorias = [
-  { categoria: "Crédito", valor: 38, fill: "var(--color-credito)" },
-  { categoria: "Investimentos", valor: 27, fill: "var(--color-investimentos)" },
-  { categoria: "Seguros", valor: 21, fill: "var(--color-seguros)" },
-  { categoria: "Cartões", valor: 14, fill: "var(--color-cartoes)" },
+  { categoria: "Digital", valor: 42, fill: "var(--color-digital)" },
+  { categoria: "Agência", valor: 27, fill: "var(--color-agencia)" },
+  { categoria: "Parceiros", valor: 19, fill: "var(--color-parceiros)" },
+  { categoria: "Telefone", valor: 12, fill: "var(--color-telefone)" },
+]
+
+// Ranking de crescimento (barras horizontais — variação % ano contra ano)
+export const dashboardRanking = [
+  { regiao: "Nordeste", valor: 22.7 },
+  { regiao: "Sudeste", valor: 18.4 },
+  { regiao: "Norte", valor: 14.1 },
+  { regiao: "Sul", valor: 11.2 },
+  { regiao: "Centro-Oeste", valor: 9.8 },
 ]
 
 export const navLinks = [

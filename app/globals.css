@@ -191,14 +191,6 @@
   }
 }
 
-/* Cursor customizado: esconde o cursor nativo em telas com ponteiro fino */
-@media (pointer: fine) {
-  .cursor-none-root,
-  .cursor-none-root * {
-    cursor: none !important;
-  }
-}
-
 @keyframes marquee {
   from {
     transform: translateX(0);

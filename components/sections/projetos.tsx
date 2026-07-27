@@ -48,7 +48,6 @@ export function Projetos() {
                 {/* Imagem */}
                 <button
                   onClick={() => setSelected(proj)}
-                  data-cursor-label="Ver case"
                   className="relative block overflow-hidden text-left"
                   aria-label={`Ver case study de ${proj.titulo}`}
                 >
