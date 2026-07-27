@@ -61,10 +61,11 @@ export function Contato() {
     <section id="contato" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
+          index="06"
           eyebrow="Contato"
           title={
             <>
-              Vamos construir algo <span className="text-primary">orientado a dados</span>
+              Vamos conversar sobre <span className="text-gradient-accent">dados e oportunidades</span>
             </>
           }
           description="Aberto a novas oportunidades como Analista de Dados / BI. Envie uma mensagem — respondo rápido."

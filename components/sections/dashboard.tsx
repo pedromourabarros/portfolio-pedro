@@ -98,10 +98,11 @@ export function Dashboard() {
     <section id="dashboard" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
-          eyebrow="Business Intelligence"
+          index="04"
+          eyebrow="Painel BI"
           title={
             <>
-              Do dado bruto à <span className="text-primary">decisão</span>
+              Um Power BI vivo, <span className="text-gradient-accent">reconstruído em código</span>
             </>
           }
           description="Uma amostra interativa do tipo de painel executivo que construo no Power BI — KPIs, tendências, quebras por dimensão e composição de portfólio. Dados ilustrativos."

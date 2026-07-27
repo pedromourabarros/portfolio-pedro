@@ -257,6 +257,32 @@ export const skillGroups: SkillGroup[] = [
   },
 ]
 
+/* Stack organizada em pills por categoria — leitura rápida e organizada. */
+export type StackGroup = { grupo: string; itens: string[] }
+
+export const stackGroups: StackGroup[] = [
+  {
+    grupo: "Data & Analytics",
+    itens: ["SQL", "Power BI", "DAX", "Excel Avançado", "ETL", "Databricks", "Tableau", "PySpark", "SAS"],
+  },
+  {
+    grupo: "Bancos de Dados",
+    itens: ["PostgreSQL", "Supabase", "Oracle", "SQL Server"],
+  },
+  {
+    grupo: "Linguagens",
+    itens: ["SQL", "Python", "JavaScript", "TypeScript", "HTML", "CSS"],
+  },
+  {
+    grupo: "Desenvolvimento",
+    itens: ["React.js", "Node.js", "Express", "APIs REST", "Webhooks", "Arquitetura SaaS"],
+  },
+  {
+    grupo: "Ferramentas",
+    itens: ["Git", "Deploy", "Integração de APIs"],
+  },
+]
+
 export const certificacoes = [
   "Programa de Capacitação em Data Analytics — Bradesco",
   "Data Visualization — FIAP ON",
@@ -334,7 +360,7 @@ export const navLinks = [
   { href: "#sobre", label: "Sobre" },
   { href: "#experiencia", label: "Experiência" },
   { href: "#projetos", label: "Projetos" },
-  { href: "#dashboard", label: "Dashboard" },
+  { href: "#dashboard", label: "Painel BI" },
   { href: "#pedrogpt", label: "PedroGPT" },
   { href: "#contato", label: "Contato" },
 ]

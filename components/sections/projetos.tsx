@@ -31,84 +31,80 @@ export function Projetos() {
     <section id="projetos" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
-          eyebrow="Portfólio"
+          index="03"
+          eyebrow="Projetos"
           title={
             <>
-              Projetos em <span className="text-gradient-accent">formato case study</span>
+              Do problema de negócio ao <span className="text-gradient-accent">impacto medido</span>
             </>
           }
-          description="Do problema ao impacto: cada projeto detalha o contexto, a solução, a arquitetura, os desafios e os resultados alcançados."
+          description="Cada projeto é apresentado como case study: contexto, solução, arquitetura, desafios e resultados. Clique para ver o detalhamento completo."
         />
 
-        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projetos.map((proj, i) => (
-            <Reveal key={proj.titulo} delay={i * 0.08}>
-              <article
-                className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/40 transition-all hover:-translate-y-1 hover:border-primary/40 ${
-                  proj.destaque && i === 0 ? "lg:col-span-2 lg:flex-row" : ""
-                }`}
-              >
-                <div
-                  className={`relative overflow-hidden ${
-                    proj.destaque && i === 0 ? "lg:w-1/2" : ""
-                  }`}
+            <Reveal key={proj.titulo} delay={i * 0.1}>
+              <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/40 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-[0_20px_50px_-20px] hover:shadow-primary/20">
+                {/* Imagem */}
+                <button
+                  onClick={() => setSelected(proj)}
+                  className="relative block overflow-hidden text-left"
+                  aria-label={`Ver case study de ${proj.titulo}`}
                 >
                   <Image
                     src={proj.imagem || "/placeholder.svg"}
                     alt={`Interface do projeto ${proj.titulo}`}
                     width={720}
                     height={450}
-                    className="aspect-[16/10] h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                   <span className="absolute left-4 top-4 rounded-full glass px-3 py-1 font-mono text-[11px] text-primary">
                     {proj.categoria}
                   </span>
-                </div>
+                </button>
 
-                <div className={`flex flex-1 flex-col p-6 md:p-7 ${proj.destaque && i === 0 ? "lg:justify-center" : ""}`}>
-                  <h3 className="text-xl font-semibold md:text-2xl">{proj.titulo}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{proj.resumo}</p>
-
-                  <div className="mt-5 flex flex-wrap gap-3">
-                    {proj.metricas.map((m) => (
-                      <div key={m.label} className="rounded-xl border border-border bg-secondary/30 px-3 py-2">
-                        <div className="text-sm font-semibold text-primary">{m.valor}</div>
-                        <div className="text-[11px] text-muted-foreground">{m.label}</div>
-                      </div>
-                    ))}
-                  </div>
+                {/* Conteúdo */}
+                <div className="flex flex-1 flex-col p-6">
+                  <h3 className="text-xl font-semibold tracking-tight">{proj.titulo}</h3>
+                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+                    {proj.resumo}
+                  </p>
 
                   <div className="mt-5 flex flex-wrap gap-1.5">
-                    {proj.stack.slice(0, 5).map((s) => (
-                      <span key={s} className="rounded-md bg-secondary/60 px-2 py-1 font-mono text-[11px] text-muted-foreground">
+                    {proj.stack.slice(0, 4).map((s) => (
+                      <span
+                        key={s}
+                        className="rounded-md border border-border/60 bg-secondary/50 px-2 py-1 font-mono text-[11px] text-muted-foreground"
+                      >
                         {s}
                       </span>
                     ))}
-                    {proj.stack.length > 5 && (
-                      <span className="rounded-md bg-secondary/60 px-2 py-1 font-mono text-[11px] text-muted-foreground">
-                        +{proj.stack.length - 5}
+                    {proj.stack.length > 4 && (
+                      <span className="rounded-md border border-border/60 bg-secondary/50 px-2 py-1 font-mono text-[11px] text-muted-foreground">
+                        +{proj.stack.length - 4}
                       </span>
                     )}
                   </div>
 
-                  <div className="mt-6 flex items-center gap-3">
+                  {/* Rodapé fixo do card */}
+                  <div className="mt-auto flex items-center justify-between gap-3 pt-6">
                     <button
                       onClick={() => setSelected(proj)}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.03] active:scale-95"
+                      className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-medium text-primary transition-colors hover:text-foreground"
                     >
                       Ver case study
-                      <ArrowUpRight className="size-4" />
+                      <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </button>
                     {proj.link && (
                       <a
                         href={proj.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        aria-label={`Abrir ${proj.titulo} em nova aba`}
+                        className="flex size-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
                       >
                         <ExternalLink className="size-4" />
-                        {proj.linkLabel}
                       </a>
                     )}
                   </div>

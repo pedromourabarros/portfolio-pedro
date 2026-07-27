@@ -46,10 +46,11 @@ export function PedroGpt() {
     <section id="pedrogpt" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-4xl px-6">
         <SectionHeading
-          eyebrow="Converse com a IA"
+          index="05"
+          eyebrow="PedroGPT"
           title={
             <>
-              Pergunte ao <span className="text-primary">PedroGPT</span>
+              Pergunte diretamente ao <span className="text-gradient-accent">meu currículo</span>
             </>
           }
           description="Um assistente de IA treinado com o currículo do Pedro. Pergunte sobre experiências, competências, projetos ou como entrar em contato — as respostas são geradas em tempo real."

@@ -1,21 +1,11 @@
 "use client"
 
-import { motion, useInView } from "motion/react"
 import { useRef } from "react"
-import {
-  BarChart3,
-  Code2,
-  Database,
-  GraduationCap,
-  ShieldCheck,
-  Target,
-  TrendingUp,
-  Workflow,
-  Award,
-} from "lucide-react"
+import { motion, useInView } from "motion/react"
+import { Award, GraduationCap, ShieldCheck, Target, TrendingUp, Workflow } from "lucide-react"
 import { Reveal, SectionHeading } from "@/components/ui/reveal"
 import { Counter } from "@/components/ui/counter"
-import { certificacoes, formacao, personal, skillGroups, stats, valores } from "@/lib/data"
+import { certificacoes, formacao, personal, stackGroups, stats, valores } from "@/lib/data"
 
 const valorIcons: Record<string, typeof Target> = {
   target: Target,
@@ -24,30 +14,19 @@ const valorIcons: Record<string, typeof Target> = {
   "trending-up": TrendingUp,
 }
 
-const groupIcons: Record<string, typeof Database> = {
-  "bar-chart-3": BarChart3,
-  database: Database,
-  "code-2": Code2,
-}
-
-function SkillBar({ nome, nivel, delay }: { nome: string; nivel: number; delay: number }) {
+function Pill({ children, delay }: { children: React.ReactNode; delay: number }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: "-40px" })
   return (
-    <div ref={ref} className="flex flex-col gap-1.5">
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-foreground">{nome}</span>
-        <span className="font-mono text-xs text-muted-foreground">{nivel}%</span>
-      </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={inView ? { width: `${nivel}%` } : { width: 0 }}
-          transition={{ duration: 1, delay, ease: [0.22, 1, 0.36, 1] }}
-          className="h-full rounded-full bg-gradient-to-r from-primary to-accent-2"
-        />
-      </div>
-    </div>
+    <motion.span
+      ref={ref}
+      initial={{ opacity: 0, y: 8 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+      transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="rounded-lg border border-border bg-secondary/40 px-3 py-1.5 text-sm text-foreground/90 transition-colors hover:border-primary/50 hover:text-primary"
+    >
+      {children}
+    </motion.span>
   )
 }
 
@@ -56,7 +35,8 @@ export function Sobre() {
     <section id="sobre" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
-          eyebrow="Sobre mim"
+          index="01"
+          eyebrow="Sobre"
           title={
             <>
               Dados com propósito, <span className="text-gradient-accent">decisão com impacto</span>
@@ -66,7 +46,7 @@ export function Sobre() {
         />
 
         {/* Stats */}
-        <div className="mt-14 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="mt-16 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {stats.map((stat, i) => (
             <Reveal key={stat.label} delay={i * 0.08}>
               <div className="glass h-full rounded-2xl p-6 transition-colors hover:border-primary/40">
@@ -80,7 +60,7 @@ export function Sobre() {
         </div>
 
         {/* Values */}
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {valores.map((valor, i) => {
             const Icon = valorIcons[valor.icon] ?? Target
             return (
@@ -97,35 +77,35 @@ export function Sobre() {
           })}
         </div>
 
-        {/* Skills + Formation */}
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
+        {/* Stack + Formação/Certificações */}
+        <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-[1.5fr_1fr]">
+          {/* Stack técnica */}
           <Reveal>
-            <div className="glass h-full rounded-2xl p-6 md:p-8">
-              <h3 className="text-lg font-medium">Stack técnica</h3>
+            <div className="glass flex h-full flex-col rounded-2xl p-6 md:p-8">
+              <h3 className="text-xl font-semibold tracking-tight">Stack técnica</h3>
               <p className="mt-1 text-sm text-muted-foreground">
                 Ferramentas e tecnologias que uso no dia a dia.
               </p>
-              <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-3">
-                {skillGroups.map((group) => {
-                  const Icon = groupIcons[group.icon] ?? Database
-                  return (
-                    <div key={group.grupo} className="flex flex-col gap-4">
-                      <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                        <Icon className="size-4" />
-                        {group.grupo}
-                      </div>
-                      <div className="flex flex-col gap-3.5">
-                        {group.skills.map((s, idx) => (
-                          <SkillBar key={s.nome} nome={s.nome} nivel={s.nivel} delay={idx * 0.05} />
-                        ))}
-                      </div>
+              <div className="mt-8 flex flex-col gap-7">
+                {stackGroups.map((group) => (
+                  <div key={group.grupo} className="flex flex-col gap-3">
+                    <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary/80">
+                      {group.grupo}
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {group.itens.map((item, idx) => (
+                        <Pill key={item} delay={idx * 0.03}>
+                          {item}
+                        </Pill>
+                      ))}
                     </div>
-                  )
-                })}
+                  </div>
+                ))}
               </div>
             </div>
           </Reveal>
 
+          {/* Formação + Certificações */}
           <Reveal delay={0.1}>
             <div className="flex h-full flex-col gap-6">
               <div className="glass rounded-2xl p-6 md:p-8">
@@ -135,7 +115,7 @@ export function Sobre() {
                 </div>
                 <div className="mt-5 flex flex-col gap-5">
                   {formacao.map((f) => (
-                    <div key={f.instituicao} className="border-l-2 border-border pl-4">
+                    <div key={f.instituicao} className="border-l-2 border-primary/30 pl-4">
                       <p className="font-medium leading-snug">{f.curso}</p>
                       <p className="text-sm text-muted-foreground">{f.instituicao}</p>
                       <p className="mt-1 font-mono text-xs text-primary">
@@ -146,7 +126,7 @@ export function Sobre() {
                 </div>
               </div>
 
-              <div className="glass rounded-2xl p-6 md:p-8">
+              <div className="glass flex-1 rounded-2xl p-6 md:p-8">
                 <div className="flex items-center gap-2 text-sm font-medium text-primary">
                   <Award className="size-4" />
                   Certificações
@@ -154,16 +134,14 @@ export function Sobre() {
                     {certificacoes.length}
                   </span>
                 </div>
-                <div className="mt-4 flex flex-wrap gap-2">
+                <ul className="mt-5 flex flex-col gap-3">
                   {certificacoes.map((c) => (
-                    <span
-                      key={c}
-                      className="rounded-lg border border-border bg-secondary/40 px-2.5 py-1.5 text-xs text-muted-foreground"
-                    >
+                    <li key={c} className="flex items-start gap-2.5 text-sm text-muted-foreground">
+                      <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary/60" />
                       {c}
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             </div>
           </Reveal>

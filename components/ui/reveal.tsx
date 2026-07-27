@@ -31,12 +31,14 @@ export function Reveal({ children, className, delay = 0, y = 24, once = true }: 
 }
 
 export function SectionHeading({
+  index,
   eyebrow,
   title,
   description,
   align = "left",
   className,
 }: {
+  index?: string
   eyebrow: string
   title: ReactNode
   description?: string
@@ -46,19 +48,26 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4",
+        "flex flex-col gap-5",
         align === "center" && "items-center text-center",
         className,
       )}
     >
       <Reveal>
-        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 font-mono text-xs uppercase tracking-widest text-primary">
-          <span className="size-1.5 rounded-full bg-primary" />
-          {eyebrow}
+        <span
+          className={cn(
+            "flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-primary",
+            align === "center" && "justify-center",
+          )}
+        >
+          <span className="h-px w-8 bg-primary/50" />
+          {index && <span className="text-primary/80">{index}</span>}
+          {index && <span className="text-primary/40">—</span>}
+          <span className="text-muted-foreground">{eyebrow}</span>
         </span>
       </Reveal>
       <Reveal delay={0.05}>
-        <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+        <h2 className="max-w-3xl text-balance text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
           {title}
         </h2>
       </Reveal>
@@ -66,7 +75,7 @@ export function SectionHeading({
         <Reveal delay={0.1}>
           <p
             className={cn(
-              "max-w-2xl text-pretty leading-relaxed text-muted-foreground",
+              "max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg",
               align === "center" && "mx-auto",
             )}
           >
