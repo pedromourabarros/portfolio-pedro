@@ -1,18 +1,24 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Sora, Manrope, JetBrains_Mono } from 'next/font/google'
 import { personal } from '@/lib/data'
 import './globals.css'
 
-const geistSans = Geist({
+const sora = Sora({
   subsets: ['latin'],
-  variable: '--font-geist-sans',
+  variable: '--font-sora',
   display: 'swap',
 })
 
-const geistMono = Geist_Mono({
+const manrope = Manrope({
   subsets: ['latin'],
-  variable: '--font-geist-mono',
+  variable: '--font-manrope',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains',
   display: 'swap',
 })
 
@@ -67,7 +73,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: 'dark',
-  themeColor: '#0a0e14',
+  themeColor: '#0f1420',
   width: 'device-width',
   initialScale: 1,
 }
@@ -91,7 +97,10 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="pt-BR" className={`dark bg-background ${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="pt-BR"
+      className={`dark bg-background ${sora.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
+    >
       <body className="font-sans antialiased">
         {children}
         <script
