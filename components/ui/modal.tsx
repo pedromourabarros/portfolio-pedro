@@ -53,11 +53,12 @@ export function Modal({
             aria-modal="true"
             aria-labelledby={labelledBy}
             tabIndex={-1}
+            data-lenis-prevent
             initial={{ opacity: 0, y: 40, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="glass relative z-10 max-h-[90svh] w-full max-w-2xl overflow-y-auto rounded-t-3xl outline-none sm:rounded-3xl"
+            className="glass relative z-10 max-h-[90svh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-t-3xl outline-none sm:rounded-3xl"
           >
             <button
               onClick={onClose}

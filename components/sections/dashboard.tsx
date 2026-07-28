@@ -64,6 +64,56 @@ const canalConfig = {
 
 const barColors = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-5)", "var(--chart-4)"]
 
+const REGIOES = ["Sudeste", "Sul", "Nordeste", "Centro-Oeste", "Norte"] as const
+
+const nf = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 })
+const formatBRL = (n: number) => `R$ ${nf.format(Math.round(n))}`
+const pct = (n: number) => `${n.toFixed(1).replace(".", ",")}%`
+
+// Total anual de referência (soma da série completa, em R$ mi)
+const TOTAL_ANUAL = dashboardReceita.reduce((s, d) => s + d.receita, 0)
+const TOTAL_REGIOES = dashboardRegioes.reduce((s, r) => s + r.valor, 0)
+
+type Kpi = { label: string; valor: string; delta: number; positivo: boolean; nota: string }
+
+function kpisFor(filtro: Filtro, receitaData: typeof dashboardReceita): Kpi[] {
+  // 12 meses = baseline "bonito" já ajustado à mão
+  if (filtro === "12 meses") return dashboardKpis as Kpi[]
+
+  // Filtros por região
+  if ((REGIOES as readonly string[]).includes(filtro)) {
+    const reg = dashboardRegioes.find((r) => r.regiao === filtro)!
+    const growth = dashboardRanking.find((r) => r.regiao === filtro)?.valor ?? 10
+    const frac = reg.valor / TOTAL_REGIOES
+    const receita = 67_240_000 * frac
+    const atend = 22_020 * frac
+    const atingimento = 100 + growth
+    const ticket = 306 * (0.9 + frac) // ticket varia por região
+    return [
+      { label: "Receita acumulada", valor: formatBRL(receita), delta: growth, positivo: true, nota: filtro },
+      { label: "Atingimento de meta", valor: pct(atingimento), delta: growth, positivo: true, nota: "vs. meta" },
+      { label: "Ticket médio", valor: formatBRL(ticket), delta: 8.4, positivo: true, nota: "vs. período anterior" },
+      { label: "Atendimentos", valor: nf.format(Math.round(atend)), delta: growth * 0.7, positivo: true, nota: filtro },
+    ]
+  }
+
+  // Filtros por período (6 meses / Trimestre)
+  const receitaSum = receitaData.reduce((s, d) => s + d.receita, 0)
+  const metaSum = receitaData.reduce((s, d) => s + d.meta, 0)
+  const frac = receitaSum / TOTAL_ANUAL
+  const atingimento = (receitaSum / metaSum) * 100
+  const receita = 67_240_000 * frac
+  const atend = 22_020 * frac
+  const ticket = 306 * (1 + (atingimento - 100) / 100) // janelas recentes = ticket maior
+  const deltaMeta = atingimento - 100
+  return [
+    { label: "Receita acumulada", valor: formatBRL(receita), delta: Math.round((70 + deltaMeta) * 10) / 10, positivo: true, nota: "no período" },
+    { label: "Atingimento de meta", valor: pct(atingimento), delta: Math.round(deltaMeta * 10) / 10, positivo: true, nota: "vs. meta" },
+    { label: "Ticket médio", valor: formatBRL(ticket), delta: Math.round((deltaMeta + 4) * 10) / 10, positivo: true, nota: "vs. período anterior" },
+    { label: "Atendimentos", valor: nf.format(Math.round(atend)), delta: 12.6, positivo: true, nota: "vs. período anterior" },
+  ]
+}
+
 function Panel({
   title,
   subtitle,
@@ -96,6 +146,8 @@ export function Dashboard() {
     if (filtro === "6 meses") return dashboardReceita.slice(-6)
     return dashboardReceita
   }, [filtro])
+
+  const kpis = useMemo(() => kpisFor(filtro, receitaData), [filtro, receitaData])
 
   const maxRanking = Math.max(...dashboardRanking.map((r) => r.valor))
 
@@ -136,30 +188,34 @@ export function Dashboard() {
 
         {/* KPIs */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {dashboardKpis.map((kpi, i) => (
-            <Reveal key={kpi.label} delay={i * 0.06} className="h-full">
-              <div className="glass-card h-full rounded-2xl p-5">
-                <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-                  {kpi.label}
-                </p>
-                <p className="mt-3 font-mono text-2xl font-semibold tracking-tight text-foreground">
-                  {kpi.valor}
-                </p>
-                <p className="mt-2 flex items-center gap-1.5 text-xs">
-                  <span
-                    className={cn(
-                      "inline-flex items-center gap-0.5 font-medium",
-                      kpi.positivo ? "text-primary" : "text-destructive",
-                    )}
-                  >
-                    <TrendingUp className="size-3" />
-                    {kpi.positivo ? "+" : "-"}
-                    {Math.abs(kpi.delta)}%
-                  </span>
-                  <span className="text-muted-foreground">{kpi.nota}</span>
-                </p>
-              </div>
-            </Reveal>
+          {kpis.map((kpi) => (
+            <div key={kpi.label} className="glass-card h-full rounded-2xl p-5">
+              <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                {kpi.label}
+              </p>
+              <motion.p
+                key={kpi.valor}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-3 font-mono text-2xl font-semibold tracking-tight text-foreground"
+              >
+                {kpi.valor}
+              </motion.p>
+              <p className="mt-2 flex items-center gap-1.5 text-xs">
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-0.5 font-medium",
+                    kpi.positivo ? "text-primary" : "text-destructive",
+                  )}
+                >
+                  <TrendingUp className="size-3" />
+                  {kpi.positivo ? "+" : "-"}
+                  {Math.abs(Math.round(kpi.delta * 10) / 10).toLocaleString("pt-BR")}%
+                </span>
+                <span className="text-muted-foreground">{kpi.nota}</span>
+              </p>
+            </div>
           ))}
         </div>
 
