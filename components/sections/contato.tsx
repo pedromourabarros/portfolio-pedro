@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "motion/react"
-import { ArrowUpRight, Check, Copy, Mail, MapPin, Send } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
+import { ArrowUpRight, Check, Copy, Loader2, Mail, MapPin, Send } from "lucide-react"
 import { SectionHeading } from "@/components/ui/reveal"
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/brand-icons"
+import { enviarMensagem } from "@/app/actions/contato"
 import { personal } from "@/lib/data"
 
 const canais = [
@@ -39,12 +40,26 @@ export function Contato() {
   const [email, setEmail] = useState("")
   const [mensagem, setMensagem] = useState("")
   const [copied, setCopied] = useState(false)
+  const [status, setStatus] = useState<"idle" | "enviando" | "ok" | "erro">("idle")
+  const [erro, setErro] = useState<string | null>(null)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const assunto = encodeURIComponent(`Contato do portfólio: ${nome || "Visitante"}`)
-    const corpo = encodeURIComponent(`${mensagem}\n\nAtenciosamente,\n${nome}\n${email}`)
-    window.location.href = `mailto:${personal.email}?subject=${assunto}&body=${corpo}`
+    setStatus("enviando")
+    setErro(null)
+
+    const res = await enviarMensagem({ nome, email, mensagem })
+
+    if (res.ok) {
+      setStatus("ok")
+      setNome("")
+      setEmail("")
+      setMensagem("")
+      setTimeout(() => setStatus("idle"), 6000)
+    } else {
+      setStatus("erro")
+      setErro(res.error)
+    }
   }
 
   async function copyEmail() {
@@ -118,10 +133,15 @@ export function Contato() {
             <div className="flex flex-wrap items-center gap-3">
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                disabled={status === "enviando"}
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <Send className="size-4" />
-                Enviar mensagem
+                {status === "enviando" ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <Send className="size-4" />
+                )}
+                {status === "enviando" ? "Enviando..." : "Enviar mensagem"}
               </button>
               <button
                 type="button"
@@ -132,6 +152,34 @@ export function Contato() {
                 {copied ? "Email copiado" : "Copiar email"}
               </button>
             </div>
+
+            <AnimatePresence mode="wait">
+              {status === "ok" && (
+                <motion.p
+                  key="ok"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  role="status"
+                  className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-primary"
+                >
+                  <Check className="size-4 shrink-0" />
+                  Mensagem enviada! O Pedro recebe e responde no e-mail informado.
+                </motion.p>
+              )}
+              {status === "erro" && erro && (
+                <motion.p
+                  key="erro"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  role="alert"
+                  className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+                >
+                  {erro}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </motion.form>
 
           {/* Canais diretos */}
