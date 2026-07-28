@@ -65,6 +65,15 @@ const canalConfig = {
 const barColors = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-5)", "var(--chart-4)"]
 
 const REGIOES = ["Sudeste", "Sul", "Nordeste", "Centro-Oeste", "Norte"] as const
+const isRegion = (f: Filtro) => (REGIOES as readonly string[]).includes(f)
+
+// Variação pseudo-determinística a partir de uma string (mesma entrada = mesma saída)
+function hashFactor(s: string): number {
+  let h = 0
+  for (let c = 0; c < s.length; c++) h = (h * 31 + s.charCodeAt(c)) >>> 0
+  return ((h % 2001) / 1000 - 1) // -1..1
+}
+const vary = (base: number, seed: string, amp: number) => base * (1 + hashFactor(seed) * amp)
 
 const nf = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 })
 const formatBRL = (n: number) => `R$ ${nf.format(Math.round(n))}`
@@ -149,7 +158,47 @@ export function Dashboard() {
 
   const kpis = useMemo(() => kpisFor(filtro, receitaData), [filtro, receitaData])
 
-  const maxRanking = Math.max(...dashboardRanking.map((r) => r.valor))
+  // Mix por canal — reage ao filtro (perturba e renormaliza para 100%)
+  const categoriasData = useMemo(() => {
+    if (filtro === "12 meses") return dashboardCategorias
+    const raw = dashboardCategorias.map((c) => ({
+      ...c,
+      valor: Math.max(4, vary(c.valor, filtro + c.categoria, 0.45)),
+    }))
+    const total = raw.reduce((s, c) => s + c.valor, 0)
+    return raw.map((c) => ({ ...c, valor: Math.round((c.valor / total) * 100) }))
+  }, [filtro])
+
+  // Receita por região — período reduz proporcionalmente; região foca a selecionada
+  const regioesData = useMemo(() => {
+    if (isRegion(filtro)) {
+      return dashboardRegioes.map((r) => ({
+        ...r,
+        valor: r.regiao === filtro ? r.valor : Number((r.valor * 0.5).toFixed(1)),
+      }))
+    }
+    const frac = receitaData.reduce((s, d) => s + d.receita, 0) / TOTAL_ANUAL
+    return dashboardRegioes.map((r) => ({ ...r, valor: Number((r.valor * frac).toFixed(1)) }))
+  }, [filtro, receitaData])
+
+  // Ranking de crescimento — reordena conforme o filtro
+  const rankingData = useMemo(() => {
+    let d = dashboardRanking.map((r) => ({ ...r }))
+    if (isRegion(filtro)) {
+      d = d.map((r) => ({
+        ...r,
+        valor:
+          r.regiao === filtro
+            ? Number((r.valor + 4).toFixed(1))
+            : Number(Math.max(2, r.valor - 1.5).toFixed(1)),
+      }))
+    } else if (filtro !== "12 meses") {
+      d = d.map((r) => ({ ...r, valor: Number(Math.max(2, vary(r.valor, filtro + r.regiao, 0.5)).toFixed(1)) }))
+    }
+    return d.sort((a, b) => b.valor - a.valor)
+  }, [filtro])
+
+  const maxRanking = Math.max(...rankingData.map((r) => r.valor))
 
   return (
     <section id="dashboard" className="relative py-24 sm:py-32">
@@ -268,7 +317,7 @@ export function Dashboard() {
                 <PieChart>
                   <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                   <Pie
-                    data={dashboardCategorias}
+                    data={categoriasData}
                     dataKey="valor"
                     nameKey="categoria"
                     innerRadius={48}
@@ -277,7 +326,7 @@ export function Dashboard() {
                     stroke="var(--background)"
                     paddingAngle={2}
                   >
-                    {dashboardCategorias.map((entry) => (
+                    {categoriasData.map((entry) => (
                       <Cell key={entry.categoria} fill={entry.fill} />
                     ))}
                     <Label
@@ -311,7 +360,7 @@ export function Dashboard() {
 
               {/* Legenda com valores à direita */}
               <ul className="flex-1 space-y-2.5">
-                {dashboardCategorias.map((c) => (
+                {categoriasData.map((c) => (
                   <li key={c.categoria} className="flex items-center gap-2 text-sm">
                     <span className="size-2.5 shrink-0 rounded-full" style={{ background: c.fill }} />
                     <span className="text-muted-foreground">{c.categoria}</span>
@@ -327,14 +376,18 @@ export function Dashboard() {
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <Panel title="Receita por região" subtitle="Em milhares de reais">
             <ChartContainer config={regioesConfig} className="aspect-[16/9] w-full">
-              <BarChart data={dashboardRegioes} margin={{ left: -12, right: 8, top: 8 }}>
+              <BarChart data={regioesData} margin={{ left: -12, right: 8, top: 8 }}>
                 <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis dataKey="regiao" tickLine={false} axisLine={false} tickMargin={8} fontSize={11} />
                 <YAxis tickLine={false} axisLine={false} tickMargin={8} fontSize={12} width={40} />
                 <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
                 <Bar dataKey="valor" radius={[6, 6, 0, 0]} barSize={40}>
-                  {dashboardRegioes.map((_, i) => (
-                    <Cell key={i} fill={barColors[i % barColors.length]} />
+                  {regioesData.map((r, i) => (
+                    <Cell
+                      key={r.regiao}
+                      fill={barColors[i % barColors.length]}
+                      fillOpacity={isRegion(filtro) && r.regiao !== filtro ? 0.3 : 1}
+                    />
                   ))}
                 </Bar>
               </BarChart>
@@ -343,23 +396,29 @@ export function Dashboard() {
 
           <Panel title="Ranking de crescimento" subtitle="Variação percentual ano contra ano" delay={0.1}>
             <ul className="mt-2 flex flex-col gap-5">
-              {dashboardRanking.map((r, i) => (
-                <li key={r.regiao}>
-                  <div className="mb-1.5 flex items-baseline justify-between">
-                    <span className="text-sm text-foreground">{r.regiao}</span>
-                    <span className="font-mono text-sm font-medium text-primary">+{r.valor}%</span>
-                  </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-secondary/60">
-                    <motion.div
-                      className="h-full rounded-full bg-gradient-to-r from-primary/70 to-primary"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${(r.valor / maxRanking) * 100}%` }}
-                      viewport={{ once: true, margin: "-40px" }}
-                      transition={{ duration: 0.9, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                    />
-                  </div>
-                </li>
-              ))}
+              {rankingData.map((r, i) => {
+                const destaque = isRegion(filtro) && r.regiao === filtro
+                return (
+                  <li key={r.regiao} className={cn(isRegion(filtro) && !destaque && "opacity-55")}>
+                    <div className="mb-1.5 flex items-baseline justify-between">
+                      <span className={cn("text-sm text-foreground", destaque && "font-semibold text-primary")}>
+                        {r.regiao}
+                      </span>
+                      <span className="font-mono text-sm font-medium text-primary">
+                        +{r.valor.toFixed(1).replace(".", ",")}%
+                      </span>
+                    </div>
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-secondary/60">
+                      <motion.div
+                        className="h-full rounded-full bg-gradient-to-r from-primary/70 to-primary"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(r.valor / maxRanking) * 100}%` }}
+                        transition={{ duration: 0.8, delay: 0.05 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                      />
+                    </div>
+                  </li>
+                )
+              })}
             </ul>
           </Panel>
         </div>

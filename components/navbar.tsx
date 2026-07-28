@@ -8,11 +8,20 @@ import { cn } from "@/lib/utils"
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string>("")
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    let last = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 24)
+      // Esconde ao descer, mostra ao subir (mantém visível perto do topo)
+      if (y > last && y > 140) setHidden(true)
+      else if (y < last) setHidden(false)
+      last = y
+    }
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
@@ -37,8 +46,8 @@ export function Navbar() {
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      animate={{ y: hidden && !open ? -110 : 0, opacity: 1 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4"
     >
       <nav
