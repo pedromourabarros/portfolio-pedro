@@ -37,7 +37,7 @@ export const valores = [
   {
     titulo: "Rigor analítico",
     descricao:
-      "Validação de integridade, governança e modelagem consistente — do dado cru ao insight confiável.",
+      "Validação de integridade, governança e modelagem consistente do dado cru até o insight confiável.",
     icon: "shield-check",
   },
   {

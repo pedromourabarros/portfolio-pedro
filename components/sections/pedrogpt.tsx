@@ -53,7 +53,7 @@ export function PedroGpt() {
               Pergunte diretamente ao <span className="text-gradient-accent">meu currículo</span>
             </>
           }
-          description="Um assistente de IA treinado com o currículo do Pedro. Pergunte sobre experiências, competências, projetos ou como entrar em contato — as respostas são geradas em tempo real."
+          description="Um assistente de IA treinado com o currículo do Pedro. Pergunte sobre experiências, competências, projetos ou como entrar em contato. As respostas são geradas em tempo real."
           align="center"
         />
 
@@ -74,7 +74,7 @@ export function PedroGpt() {
               <div>
                 <p className="text-sm font-semibold text-foreground">PedroGPT</p>
                 <p className="text-xs text-muted-foreground">
-                  {isBusy ? "Digitando…" : "Online · responde em segundos"}
+                  {isBusy ? "Digitando..." : "Online · responde em segundos"}
                 </p>
               </div>
             </div>
@@ -187,7 +187,7 @@ export function PedroGpt() {
                   submit(input)
                 }
               }}
-              placeholder={`Pergunte sobre a carreira do ${personal.primeiroNome}…`}
+              placeholder={`Pergunte sobre a carreira do ${personal.primeiroNome}...`}
               aria-label="Escreva sua pergunta"
               className="flex-1 rounded-xl border border-border bg-background/60 px-4 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary"
             />

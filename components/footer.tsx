@@ -17,7 +17,7 @@ export function Footer() {
               <span className="font-semibold text-foreground">{personal.nome}</span>
             </a>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              {personal.cargo} — transformando dados em decisões de negócio.
+              {personal.cargo} transformando dados em decisões de negócio.
             </p>
           </div>
 

@@ -42,8 +42,8 @@ export function Contato() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const assunto = encodeURIComponent(`Contato do portfólio — ${nome || "Visitante"}`)
-    const corpo = encodeURIComponent(`${mensagem}\n\n—\n${nome}\n${email}`)
+    const assunto = encodeURIComponent(`Contato do portfólio: ${nome || "Visitante"}`)
+    const corpo = encodeURIComponent(`${mensagem}\n\nAtenciosamente,\n${nome}\n${email}`)
     window.location.href = `mailto:${personal.email}?subject=${assunto}&body=${corpo}`
   }
 
@@ -68,7 +68,7 @@ export function Contato() {
               Vamos conversar sobre <span className="text-gradient-accent">dados e oportunidades</span>
             </>
           }
-          description="Aberto a novas oportunidades como Analista de Dados / BI. Envie uma mensagem — respondo rápido."
+          description="Aberto a novas oportunidades como Analista de Dados / BI. Envie uma mensagem e eu respondo rápido."
         />
 
         <div className="mt-12 grid gap-6 lg:grid-cols-5">
@@ -111,7 +111,7 @@ export function Contato() {
                 value={mensagem}
                 onChange={(e) => setMensagem(e.target.value)}
                 rows={5}
-                placeholder="Conte sobre a oportunidade ou projeto…"
+                placeholder="Conte sobre a oportunidade ou projeto..."
                 className="resize-none rounded-xl border border-border bg-background/60 px-4 py-2.5 text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-primary"
               />
             </label>
