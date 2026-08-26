@@ -45,6 +45,8 @@ const filtros = [
 ] as const
 type Filtro = (typeof filtros)[number]
 
+const PERIODOS = ["12 meses", "6 meses", "Trimestre"] as const
+
 const receitaConfig = {
   receita: { label: "Receita", color: "var(--chart-1)" },
   meta: { label: "Meta", color: "var(--chart-4)" },
@@ -226,6 +228,43 @@ function insightsFor(
   return insights
 }
 
+function FilterGroup({
+  label,
+  options,
+  active,
+  onSelect,
+}: {
+  label: string
+  options: readonly Filtro[]
+  active: Filtro
+  onSelect: (f: Filtro) => void
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
+        {label}
+      </span>
+      <div className="flex flex-wrap items-center gap-1.5">
+        {options.map((f) => (
+          <button
+            key={f}
+            onClick={() => onSelect(f)}
+            aria-pressed={active === f}
+            className={cn(
+              "rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all",
+              active === f
+                ? "border-primary/60 bg-primary/15 text-primary"
+                : "border-transparent text-muted-foreground hover:border-border hover:text-foreground",
+            )}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function GroupLabel({
   icon: Icon,
   title,
@@ -344,24 +383,22 @@ export function Dashboard() {
           description="Amostra interativa do tipo de leitura executiva que entrego no dia a dia: KPIs, séries temporais, quebra por canal, ranking regional e a consulta SQL por trás dos números — tudo com filtros aplicados em tempo real. Dados ilustrativos."
         />
 
-        {/* Barra de filtros (pills) */}
+        {/* Barra de filtros (pills) — separada por eixo: período e região */}
         <Reveal className="mt-10">
-          <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-border bg-card/40 p-3 backdrop-blur">
-            {filtros.map((f) => (
-              <button
-                key={f}
-                onClick={() => setFiltro(f)}
-                aria-pressed={filtro === f}
-                className={cn(
-                  "rounded-full border px-4 py-1.5 text-sm font-medium transition-all",
-                  filtro === f
-                    ? "border-primary/60 bg-primary/15 text-primary"
-                    : "border-transparent text-muted-foreground hover:border-border hover:text-foreground",
-                )}
-              >
-                {f}
-              </button>
-            ))}
+          <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card/40 p-4 backdrop-blur sm:flex-row sm:items-center sm:gap-5">
+            <FilterGroup
+              label="Período"
+              options={PERIODOS}
+              active={filtro}
+              onSelect={setFiltro}
+            />
+            <span className="hidden h-8 w-px shrink-0 bg-border sm:block" aria-hidden />
+            <FilterGroup
+              label="Região"
+              options={REGIOES}
+              active={filtro}
+              onSelect={setFiltro}
+            />
           </div>
         </Reveal>
 
