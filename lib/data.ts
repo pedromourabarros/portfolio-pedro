@@ -132,6 +132,8 @@ export type Projeto = {
   link?: string
   linkLabel?: string
   destaque?: boolean
+  /** Quando não há um site real para linkar, renderiza uma visualização interativa no modal. */
+  demo?: "forecast" | "churn" | "etl"
 }
 
 export const projetos: Projeto[] = [
@@ -188,27 +190,78 @@ export const projetos: Projeto[] = [
     destaque: true,
   },
   {
-    titulo: "Segmentação RFM de Clientes",
-    categoria: "Data Science · Clusterização",
+    titulo: "Calculadora Financeira",
+    categoria: "Aplicação Web",
     resumo:
-      "Segmentação de base de clientes com metodologia RFM e K-Means para direcionar campanhas por perfil de valor e risco de churn.",
+      "Aplicação web para simulações financeiras, com foco em usabilidade e cálculos precisos.",
     problema:
-      "A área de marketing tratava toda a base de clientes de forma homogênea, disparando as mesmas campanhas para perfis muito diferentes de valor e engajamento — desperdiçando orçamento e reduzindo conversão.",
+      "Usuários precisavam de uma forma rápida e acessível de simular cenários financeiros sem planilhas complexas.",
     solucao:
-      "Construção de um modelo de segmentação combinando análise RFM (Recência, Frequência, Monetário) com clusterização K-Means, classificando cada cliente em perfis como Campeões, Fiéis, Em risco e Inativos para orientar ações comerciais específicas por segmento.",
+      "Uma aplicação web leve e intuitiva para simulações financeiras, com interface limpa e cálculos instantâneos.",
     arquitetura:
-      "Extração e tratamento de dados transacionais via SQL, engenharia de atributos e padronização com Pandas/Scikit-learn em Python, escolha do número ideal de clusters via método do cotovelo e silhouette score, e exportação dos segmentos para consumo no Power BI.",
+      "Aplicação front-end em JavaScript, HTML e CSS, com lógica de cálculo no cliente e deploy contínuo.",
     desafios:
-      "Tratar outliers de clientes de altíssimo ticket sem distorcer os clusters, validar a estabilidade dos grupos ao longo do tempo e traduzir os clusters estatísticos em rótulos de negócio compreensíveis para o time comercial.",
+      "Garantir precisão nos cálculos e uma experiência simples e responsiva em diferentes dispositivos.",
     impacto:
-      "Base de clientes reclassificada em 5 segmentos acionáveis, servindo de insumo direto para campanhas de retenção e upsell direcionadas por perfil de valor.",
+      "Ferramenta pública e funcional que simplifica simulações financeiras do dia a dia.",
     metricas: [
-      { valor: "5 clusters", label: "Segmentos de clientes" },
-      { valor: "RFM", label: "Metodologia aplicada" },
-      { valor: "K-Means", label: "Algoritmo de clusterização" },
+      { valor: "Web", label: "Acessível a qualquer um" },
+      { valor: "Instantâneo", label: "Cálculos em tempo real" },
+      { valor: "Deploy", label: "Publicado online" },
     ],
-    stack: ["Python", "Pandas", "Scikit-learn", "SQL", "Power BI", "Jupyter"],
-    imagem: "/projetos/segmentacao-rfm.png",
+    stack: ["JavaScript", "HTML", "CSS"],
+    imagem: "/projetos/calculadora.png",
+    link: "https://calculadora-financeiraa.netlify.app",
+    linkLabel: "calculadora-financeiraa.netlify.app",
+  },
+  {
+    titulo: "Previsão de Vendas com Machine Learning",
+    categoria: "Data Science · Séries Temporais",
+    resumo:
+      "Modelo preditivo que projeta a receita dos próximos meses a partir do histórico de vendas, com faixa de confiança para o planejamento orçamentário.",
+    problema:
+      "O planejamento de orçamento e metas era feito só com base em médias simples do histórico, sem considerar sazonalidade e tendência — gerando metas mal calibradas e surpresas no fechamento do mês.",
+    solucao:
+      "Um modelo de séries temporais que aprende o padrão sazonal e de tendência da receita e projeta os próximos meses com uma faixa de confiança, permitindo que a área comercial planeje metas realistas com antecedência.",
+    arquitetura:
+      "Tratamento e preparação da série histórica em Python (Pandas), modelagem com decomposição de tendência/sazonalidade e regressão, validação com janela deslizante (backtesting) e exportação da previsão para consumo em dashboards.",
+    desafios:
+      "Lidar com quebras de padrão causadas por sazonalidades atípicas (datas comerciais, promoções) e comunicar a incerteza da previsão de forma clara para quem não é técnico.",
+    impacto:
+      "Projeção de receita com acurácia de 91,4% no backtesting, usada como referência para o planejamento de metas trimestrais.",
+    metricas: [
+      { valor: "91,4%", label: "Acurácia no backtesting" },
+      { valor: "3 meses", label: "Horizonte de previsão" },
+      { valor: "IC 95%", label: "Faixa de confiança" },
+    ],
+    stack: ["Python", "Pandas", "Séries Temporais", "SQL", "Power BI"],
+    imagem: "/projetos/previsao-vendas.png",
+    demo: "forecast",
+    destaque: true,
+  },
+  {
+    titulo: "Análise de Churn de Clientes",
+    categoria: "Data Science · Modelo Preditivo",
+    resumo:
+      "Modelo que identifica clientes com maior risco de cancelamento e os principais fatores que levam à saída, para priorizar ações de retenção.",
+    problema:
+      "O time de retenção agia de forma reativa, só percebendo o cancelamento depois que ele acontecia, sem visibilidade de quais clientes estavam em risco nem por quê.",
+    solucao:
+      "Um modelo preditivo que atribui um score de risco de churn a cada cliente com base em comportamento de uso, histórico de suporte e variação de preço, priorizando quem deve receber ações de retenção primeiro.",
+    arquitetura:
+      "Engenharia de atributos a partir de dados transacionais e de uso em SQL, treinamento de um modelo de classificação em Python (Scikit-learn), análise de importância de variáveis e integração do score final ao CRM.",
+    desafios:
+      "Balancear a base entre clientes que cancelam e que não cancelam (classes desbalanceadas) e traduzir a saída do modelo em ações práticas e priorizadas para o time comercial.",
+    impacto:
+      "23% da base identificada como em risco antes do cancelamento efetivo, permitindo ações de retenção direcionadas aos clientes certos.",
+    metricas: [
+      { valor: "23%", label: "Base classificada em risco" },
+      { valor: "3 fatores", label: "Principais drivers de churn" },
+      { valor: "Priorizado", label: "Score por cliente" },
+    ],
+    stack: ["Python", "Scikit-learn", "SQL", "Pandas", "CRM"],
+    imagem: "/projetos/churn-clientes.png",
+    demo: "churn",
     destaque: true,
   },
   {
@@ -233,32 +286,8 @@ export const projetos: Projeto[] = [
     ],
     stack: ["Python", "SQL", "Databricks", "ETL", "Pandas"],
     imagem: "/projetos/pipeline-etl.png",
+    demo: "etl",
     destaque: true,
-  },
-  {
-    titulo: "Calculadora Financeira",
-    categoria: "Aplicação Web",
-    resumo:
-      "Aplicação web para simulações financeiras, com foco em usabilidade e cálculos precisos.",
-    problema:
-      "Usuários precisavam de uma forma rápida e acessível de simular cenários financeiros sem planilhas complexas.",
-    solucao:
-      "Uma aplicação web leve e intuitiva para simulações financeiras, com interface limpa e cálculos instantâneos.",
-    arquitetura:
-      "Aplicação front-end em JavaScript, HTML e CSS, com lógica de cálculo no cliente e deploy contínuo.",
-    desafios:
-      "Garantir precisão nos cálculos e uma experiência simples e responsiva em diferentes dispositivos.",
-    impacto:
-      "Ferramenta pública e funcional que simplifica simulações financeiras do dia a dia.",
-    metricas: [
-      { valor: "Web", label: "Acessível a qualquer um" },
-      { valor: "Instantâneo", label: "Cálculos em tempo real" },
-      { valor: "Deploy", label: "Publicado online" },
-    ],
-    stack: ["JavaScript", "HTML", "CSS"],
-    imagem: "/projetos/calculadora.png",
-    link: "https://calculadora-financeiraa.netlify.app",
-    linkLabel: "calculadora-financeiraa.netlify.app",
   },
 ]
 

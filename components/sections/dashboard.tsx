@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, type ComponentType } from "react"
 import { motion } from "motion/react"
 import {
   Area,
@@ -16,7 +16,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
-import { Sparkles, Terminal, TrendingUp } from "lucide-react"
+import { LayoutGrid, MapPin, Sparkles, Terminal, TrendingUp } from "lucide-react"
 import {
   ChartContainer,
   ChartTooltip,
@@ -226,6 +226,28 @@ function insightsFor(
   return insights
 }
 
+function GroupLabel({
+  icon: Icon,
+  title,
+  className,
+}: {
+  icon: ComponentType<{ className?: string }>
+  title: string
+  className?: string
+}) {
+  return (
+    <div className={cn("flex items-center gap-2.5", className)}>
+      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <Icon className="size-3.5" />
+      </span>
+      <span className="font-mono text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+        {title}
+      </span>
+      <span className="h-px flex-1 bg-border/70" />
+    </div>
+  )
+}
+
 function Panel({
   title,
   subtitle,
@@ -344,7 +366,8 @@ export function Dashboard() {
         </Reveal>
 
         {/* KPIs */}
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <GroupLabel icon={LayoutGrid} title="Visão executiva" className="mt-10 mb-4" />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {kpis.map((kpi) => (
             <div key={kpi.label} className="glass-card h-full rounded-2xl p-5">
               <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
@@ -377,7 +400,8 @@ export function Dashboard() {
         </div>
 
         {/* Linha 1: Receita x meta (grande) + Mix por canal (donut) */}
-        <div className="mt-6 grid gap-6 lg:grid-cols-5">
+        <GroupLabel icon={TrendingUp} title="Séries & composição" className="mt-10 mb-4" />
+        <div className="grid gap-6 lg:grid-cols-5">
           <Panel
             title="Receita x meta"
             subtitle="Evolução mensal em milhares de reais"
@@ -481,7 +505,8 @@ export function Dashboard() {
         </div>
 
         {/* Linha 2: Receita por região (barras, clicáveis) + Ranking de crescimento */}
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <GroupLabel icon={MapPin} title="Detalhamento regional" className="mt-10 mb-4" />
+        <div className="grid gap-6 lg:grid-cols-2">
           <Panel title="Receita por região" subtitle="Em milhares de reais · clique numa barra para filtrar">
             <ChartContainer config={regioesConfig} className="aspect-[16/9] w-full">
               <BarChart data={regioesData} margin={{ left: -12, right: 8, top: 8 }}>
@@ -541,7 +566,8 @@ export function Dashboard() {
         </div>
 
         {/* Linha 3: Insights automáticos + Consulta SQL — a camada técnica por trás do painel */}
-        <div className="mt-6 grid gap-6 lg:grid-cols-5">
+        <GroupLabel icon={Terminal} title="Camada técnica" className="mt-10 mb-4" />
+        <div className="grid gap-6 lg:grid-cols-5">
           <Panel
             title="Insights automáticos"
             subtitle="Leitura executiva gerada a partir do recorte atual"

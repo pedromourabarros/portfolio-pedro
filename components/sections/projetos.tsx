@@ -8,12 +8,14 @@ import {
   ExternalLink,
   Layers,
   Lightbulb,
+  Sparkles,
   Target,
   TrendingUp,
   Zap,
 } from "lucide-react"
 import { Reveal, SectionHeading } from "@/components/ui/reveal"
 import { Modal } from "@/components/ui/modal"
+import { ProjectDemo } from "@/components/project-demo"
 import { projetos, type Projeto } from "@/lib/data"
 
 const caseBlocks = [
@@ -62,6 +64,12 @@ export function Projetos() {
                   <span className="absolute left-4 top-4 rounded-full glass px-3 py-1 font-mono text-[11px] text-primary">
                     {proj.categoria}
                   </span>
+                  {proj.demo && (
+                    <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full glass px-3 py-1 font-mono text-[11px] text-primary">
+                      <Sparkles className="size-3" />
+                      Demo
+                    </span>
+                  )}
                 </button>
 
                 {/* Conteúdo */}
@@ -177,6 +185,12 @@ export function Projetos() {
                   ))}
                 </div>
               </div>
+
+              {selected.demo && (
+                <div className="mt-7">
+                  <ProjectDemo kind={selected.demo} />
+                </div>
+              )}
 
               {selected.link && (
                 <a
