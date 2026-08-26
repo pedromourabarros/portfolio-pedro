@@ -173,6 +173,21 @@
   ::-webkit-scrollbar-thumb:hover {
     background: color-mix(in oklab, var(--aqua) 45%, var(--surface-2));
   }
+
+  /* Cursor de mão consistente em todo elemento clicável (navegadores Chromium
+     não aplicam pointer a <button> por padrão) */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  a[href],
+  label[for],
+  select,
+  summary {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled='true'] {
+    cursor: not-allowed;
+  }
 }
 
 @layer utilities {

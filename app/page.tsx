@@ -1,6 +1,7 @@
 import { AuroraBackground } from "@/components/aurora-background"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { Navbar } from "@/components/navbar"
+import { CommandPalette } from "@/components/command-palette"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { Hero } from "@/components/sections/hero"
 import { Sobre } from "@/components/sections/sobre"
@@ -18,6 +19,7 @@ export default function Page() {
       <ScrollProgress />
       <AuroraBackground />
       <Navbar />
+      <CommandPalette />
       <main>
         <Hero />
         <Sobre />

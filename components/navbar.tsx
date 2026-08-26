@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
-import { Menu, X } from "lucide-react"
+import { Menu, Search, X } from "lucide-react"
 import { navLinks, personal } from "@/lib/data"
 import { cn } from "@/lib/utils"
 
@@ -90,6 +90,17 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
+            className="hidden items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground md:inline-flex"
+            aria-label="Abrir busca rápida"
+          >
+            <Search className="size-3.5" />
+            <span className="hidden lg:inline">Buscar</span>
+            <kbd className="rounded-md border border-border bg-secondary/60 px-1.5 py-0.5 font-mono text-[10px]">
+              ⌘K
+            </kbd>
+          </button>
           <a
             href="#contato"
             className="hidden rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.03] active:scale-95 sm:inline-flex"
@@ -116,6 +127,18 @@ export function Navbar() {
             className="glass absolute inset-x-4 top-20 rounded-2xl p-3 md:hidden"
           >
             <ul className="flex flex-col">
+              <li className="mb-1">
+                <button
+                  onClick={() => {
+                    setOpen(false)
+                    window.dispatchEvent(new Event("open-command-palette"))
+                  }}
+                  className="flex w-full items-center gap-2 rounded-lg px-4 py-3 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                >
+                  <Search className="size-4" />
+                  Busca rápida
+                </button>
+              </li>
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
