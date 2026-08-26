@@ -68,7 +68,7 @@ export function Contato() {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // clipboard indisponível — silencioso
+      // clipboard indisponível - silencioso
     }
   }
 

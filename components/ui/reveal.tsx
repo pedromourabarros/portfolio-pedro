@@ -62,7 +62,7 @@ export function SectionHeading({
         >
           <span className="h-px w-8 bg-primary/50" />
           {index && <span className="text-primary/80">{index}</span>}
-          {index && <span className="text-primary/40">—</span>}
+          {index && <span className="text-primary/40">-</span>}
           <span className="text-muted-foreground">{eyebrow}</span>
         </span>
       </Reveal>

@@ -4,7 +4,7 @@ export function AuroraBackground() {
       {/* Base */}
       <div className="absolute inset-0 bg-background" />
 
-      {/* Orbs de brilho — estáticos, com deriva leve apenas por translate (sem
+      {/* Orbs de brilho - estáticos, com deriva leve apenas por translate (sem
           re-rasterizar o blur a cada frame). */}
       <div
         className="aurora-orb absolute left-[8%] top-[-12%] h-[42rem] w-[42rem] rounded-full opacity-25 blur-[110px]"

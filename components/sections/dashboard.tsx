@@ -125,7 +125,7 @@ function kpisFor(filtro: Filtro, receitaData: typeof dashboardReceita): Kpi[] {
   ]
 }
 
-// Consulta SQL "real" por trás da visualização — reage ao filtro selecionado
+// Consulta SQL "real" por trás da visualização - reage ao filtro selecionado
 function sqlFor(filtro: Filtro): string {
   const janela = filtro === "6 meses" ? "6" : filtro === "Trimestre" ? "3" : "12"
   const lines = [
@@ -198,7 +198,7 @@ function SqlBlock({ sql }: { sql: string }) {
   )
 }
 
-// Leitura executiva gerada a partir dos dados filtrados — resume o que mudaria
+// Leitura executiva gerada a partir dos dados filtrados - resume o que mudaria
 // numa reunião de resultados, sem precisar abrir o painel completo.
 function insightsFor(
   filtro: Filtro,
@@ -213,7 +213,7 @@ function insightsFor(
 
   const insights = [
     `${topRegiao.regiao} lidera o crescimento (+${topRegiao.valor.toFixed(1).replace(".", ",")}% a/a) e sustenta boa parte do avanço de receita no período.`,
-    `${topCanal.categoria} concentra ${topCanal.valor}% do mix de canais — segue como a principal via de aquisição a monitorar.`,
+    `${topCanal.categoria} concentra ${topCanal.valor}% do mix de canais - segue como a principal via de aquisição a monitorar.`,
   ]
   if (atingimento) {
     insights.push(
@@ -322,7 +322,7 @@ export function Dashboard() {
 
   const kpis = useMemo(() => kpisFor(filtro, receitaData), [filtro, receitaData])
 
-  // Mix por canal — reage ao filtro (perturba e renormaliza para 100%)
+  // Mix por canal - reage ao filtro (perturba e renormaliza para 100%)
   const categoriasData = useMemo(() => {
     if (filtro === "12 meses") return dashboardCategorias
     const raw = dashboardCategorias.map((c) => ({
@@ -333,7 +333,7 @@ export function Dashboard() {
     return raw.map((c) => ({ ...c, valor: Math.round((c.valor / total) * 100) }))
   }, [filtro])
 
-  // Receita por região — período reduz proporcionalmente; região foca a selecionada
+  // Receita por região - período reduz proporcionalmente; região foca a selecionada
   const regioesData = useMemo(() => {
     if (isRegion(filtro)) {
       return dashboardRegioes.map((r) => ({
@@ -345,7 +345,7 @@ export function Dashboard() {
     return dashboardRegioes.map((r) => ({ ...r, valor: Number((r.valor * frac).toFixed(1)) }))
   }, [filtro, receitaData])
 
-  // Ranking de crescimento — reordena conforme o filtro
+  // Ranking de crescimento - reordena conforme o filtro
   const rankingData = useMemo(() => {
     let d = dashboardRanking.map((r) => ({ ...r }))
     if (isRegion(filtro)) {
@@ -383,7 +383,7 @@ export function Dashboard() {
           description="Amostra interativa do tipo de leitura executiva que entrego no dia a dia: KPIs, séries temporais, quebra por canal, ranking regional e a consulta SQL por trás dos números, tudo com filtros aplicados em tempo real. Dados ilustrativos."
         />
 
-        {/* Barra de filtros (pills) — separada por eixo: período e região */}
+        {/* Barra de filtros (pills) - separada por eixo: período e região */}
         <Reveal className="mt-10">
           <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card/40 p-4 backdrop-blur sm:flex-row sm:items-center sm:gap-5">
             <FilterGroup
@@ -602,7 +602,7 @@ export function Dashboard() {
           </Panel>
         </div>
 
-        {/* Linha 3: Insights automáticos + Consulta SQL — a camada técnica por trás do painel */}
+        {/* Linha 3: Insights automáticos + Consulta SQL - a camada técnica por trás do painel */}
         <GroupLabel icon={Terminal} title="Camada técnica" className="mt-10 mb-4" />
         <div className="grid gap-6 lg:grid-cols-5">
           <Panel

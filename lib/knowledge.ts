@@ -34,7 +34,7 @@ function buildKnowledge(): string {
 
   const certs = certificacoes.map((c) => `- ${c}`).join("\n")
   const form = formacao
-    .map((f) => `- ${f.curso} — ${f.instituicao} (${f.periodo})${f.detalhe ? ` · ${f.detalhe}` : ""}`)
+    .map((f) => `- ${f.curso} - ${f.instituicao} (${f.periodo})${f.detalhe ? ` · ${f.detalhe}` : ""}`)
     .join("\n")
   const st = stats.map((s) => `- ${s.valor}${s.sufixo ?? ""}: ${s.label}`).join("\n")
   const vals = valores.map((v) => `- ${v.titulo}: ${v.descricao}`).join("\n")
