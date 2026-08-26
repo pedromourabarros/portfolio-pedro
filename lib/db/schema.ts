@@ -62,3 +62,15 @@ export const contactMessage = pgTable("contact_message", {
   lida: boolean("lida").notNull().default(false),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 })
+
+/* ------------------------- App: analytics ao vivo ------------------------ */
+// Eventos anônimos de navegação (sem dados pessoais) usados para alimentar o
+// widget "Analytics ao vivo" — uma demonstração real de coleta e agregação
+// de dados, no próprio portfólio de um analista de dados.
+export const siteEvent = pgTable("site_event", {
+  id: serial("id").primaryKey(),
+  sessionId: text("sessionId").notNull(),
+  kind: text("kind").notNull(), // "view" | "heartbeat" | "section"
+  section: text("section"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+})

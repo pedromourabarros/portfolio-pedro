@@ -263,7 +263,7 @@ export function CommandPalette() {
               </kbd>
             </div>
 
-            <div ref={listRef} className="max-h-[50vh] overflow-y-auto p-2">
+            <div ref={listRef} data-lenis-prevent className="max-h-[50vh] overflow-y-auto p-2">
               {grupos.length === 0 && (
                 <p className="px-3 py-6 text-center text-sm text-muted-foreground">
                   Nenhum resultado para &quot;{query}&quot;

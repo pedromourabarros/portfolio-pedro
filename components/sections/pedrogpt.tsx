@@ -91,7 +91,7 @@ export function PedroGpt() {
           </div>
 
           {/* Mensagens */}
-          <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto px-5 py-6">
+          <div ref={scrollRef} data-lenis-prevent className="flex-1 space-y-5 overflow-y-auto px-5 py-6">
             {messages.length === 0 && (
               <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
                 <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">

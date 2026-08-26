@@ -2,6 +2,7 @@ import { AuroraBackground } from "@/components/aurora-background"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { Navbar } from "@/components/navbar"
 import { CommandPalette } from "@/components/command-palette"
+import { LiveAnalytics } from "@/components/live-analytics"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import { Hero } from "@/components/sections/hero"
 import { Sobre } from "@/components/sections/sobre"
@@ -20,6 +21,7 @@ export default function Page() {
       <AuroraBackground />
       <Navbar />
       <CommandPalette />
+      <LiveAnalytics />
       <main>
         <Hero />
         <Sobre />
