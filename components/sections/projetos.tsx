@@ -58,6 +58,7 @@ export function Projetos() {
                     alt={`Interface do projeto ${proj.titulo}`}
                     width={720}
                     height={450}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
@@ -132,6 +133,7 @@ export function Projetos() {
                 alt={`Interface do projeto ${selected.titulo}`}
                 width={720}
                 height={360}
+                sizes="(max-width: 640px) 100vw, 640px"
                 className="aspect-[2/1] w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[oklch(0.19_0.014_240)] to-transparent" />
