@@ -69,9 +69,9 @@ export const experiencias: Experiencia[] = [
   {
     empresa: "Bradesco Prime",
     cargo: "Business Intelligence I",
-    periodo: "Abr 2026 — Atual",
+    periodo: "Abr 2026 — Ago 2026",
     local: "Osasco, SP",
-    atual: true,
+    atual: false,
     resumo:
       "Suporte analítico a decisões de negócio em nível executivo, com foco em SQL em ambiente Databricks e dashboards estratégicos no Power BI.",
     destaques: [
