@@ -75,7 +75,12 @@ export function Footer() {
           <p>
             © {ano} {personal.nome}. Todos os direitos reservados.
           </p>
-          <p>Feito com Next.js, Tailwind CSS e IA.</p>
+          <div className="flex items-center gap-4">
+            <p>Feito com Next.js, Tailwind CSS e IA.</p>
+            <a href="/admin" className="text-muted-foreground/60 transition-colors hover:text-primary">
+              Painel
+            </a>
+          </div>
         </div>
       </div>
     </footer>
