@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system — "Midnight Data" (dark-only, premium)
+ * Design system - "Midnight Data" (dark-only, premium)
  * Headings: Sora | Body: Manrope | Mono: JetBrains Mono
  */
 
@@ -265,8 +265,8 @@
   }
 }
 
-/* Deriva leve dos orbs — SOMENTE translate, para o compositor não precisar
-   re-rasterizar a superfície borrada a cada frame (blur estático = barato). */
+/* Deriva leve dos orbs - SOMENTE translate, para o compositor não precisar
+   re-rasterizar a superfície borrada a cada frame (blur est��tico = barato). */
 @keyframes aurora-drift {
   0%,
   100% {

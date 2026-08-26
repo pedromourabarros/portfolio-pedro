@@ -69,7 +69,7 @@ export const experiencias: Experiencia[] = [
   {
     empresa: "Bradesco Prime",
     cargo: "Business Intelligence I",
-    periodo: "Abr 2026 — Ago 2026",
+    periodo: "Abr 2026 - Ago 2026",
     local: "Osasco, SP",
     atual: false,
     resumo:
@@ -87,7 +87,7 @@ export const experiencias: Experiencia[] = [
   {
     empresa: "Bradesco",
     cargo: "Estagiário em Análise de Dados",
-    periodo: "Out 2024 — Mar 2026",
+    periodo: "Out 2024 - Mar 2026",
     local: "Osasco, SP",
     resumo:
       "Análises estruturadas para áreas de negócio internas, construção de KPIs em Power BI e consolidação de bases com Excel avançado.",
@@ -103,7 +103,7 @@ export const experiencias: Experiencia[] = [
   {
     empresa: "Cielo",
     cargo: "Aprendiz em Análise de Dados",
-    periodo: "Jul 2024 — Out 2024",
+    periodo: "Jul 2024 - Out 2024",
     local: "Barueri, SP",
     resumo:
       "Monitoramento de indicadores operacionais, análises exploratórias em Python e automação de processos manuais.",
@@ -334,7 +334,7 @@ export const skillGroups: SkillGroup[] = [
   },
 ]
 
-/* Stack organizada em pills por categoria — leitura rápida e organizada. */
+/* Stack organizada em pills por categoria - leitura rápida e organizada. */
 export type StackGroup = { grupo: string; itens: string[] }
 
 export const stackGroups: StackGroup[] = [
@@ -361,36 +361,36 @@ export const stackGroups: StackGroup[] = [
 ]
 
 export const certificacoes = [
-  "Programa de Capacitação em Data Analytics — Bradesco",
-  "Data Visualization — FIAP ON",
-  "Tableau — Alura",
-  "Power BI — Alura",
-  "Banco de Dados Oracle — FIAP ON",
-  "Inteligência Artificial — FIAP ON",
-  "Python — FIAP ON",
-  "JavaScript Completo — Curso em Vídeo",
-  "Front-end — FIAP ON",
-  "Lógica de Programação — Alura",
-  "Algoritmos — FIAP ON",
+  "Programa de Capacitação em Data Analytics - Bradesco",
+  "Data Visualization - FIAP ON",
+  "Tableau - Alura",
+  "Power BI - Alura",
+  "Banco de Dados Oracle - FIAP ON",
+  "Inteligência Artificial - FIAP ON",
+  "Python - FIAP ON",
+  "JavaScript Completo - Curso em Vídeo",
+  "Front-end - FIAP ON",
+  "Lógica de Programação - Alura",
+  "Algoritmos - FIAP ON",
 ]
 
 export const formacao = [
   {
-    instituicao: "FIAP — Faculdade de Informática e Administração Paulista",
+    instituicao: "FIAP - Faculdade de Informática e Administração Paulista",
     curso: "Engenharia de Software",
-    periodo: "2023 — Presente",
+    periodo: "2023 - Presente",
     detalhe: "Média global: 9.23",
   },
   {
     instituicao: "Yázigi",
-    curso: "Inglês — Nível B2",
-    periodo: "2021 — 2024",
+    curso: "Inglês - Nível B2",
+    periodo: "2021 - 2024",
     detalhe: "Proficiência avançada",
   },
 ]
 
 /* ----------------------------------------------------------------
-   Dashboard BI — dados ilustrativos (KPIs, séries e composições)
+   Dashboard BI - dados ilustrativos (KPIs, séries e composições)
    Demonstram o tipo de análise que o Pedro entrega no dia a dia.
 ------------------------------------------------------------------- */
 // KPIs executivos (formatados como cartões de leitura rápida)
@@ -417,7 +417,7 @@ export const dashboardReceita = [
   { mes: "Dez", receita: 7.9, meta: 6.2 },
 ]
 
-// Receita por região (barras verticais — R$ milhões)
+// Receita por região (barras verticais - R$ milhões)
 export const dashboardRegioes = [
   { regiao: "Sudeste", valor: 5.9 },
   { regiao: "Sul", valor: 1.7 },
@@ -426,7 +426,7 @@ export const dashboardRegioes = [
   { regiao: "Norte", valor: 0.6 },
 ]
 
-// Mix por canal (donut — participação percentual)
+// Mix por canal (donut - participação percentual)
 export const dashboardCategorias = [
   { categoria: "Digital", valor: 42, fill: "var(--color-digital)" },
   { categoria: "Agência", valor: 27, fill: "var(--color-agencia)" },
@@ -434,7 +434,7 @@ export const dashboardCategorias = [
   { categoria: "Telefone", valor: 12, fill: "var(--color-telefone)" },
 ]
 
-// Ranking de crescimento (barras horizontais — variação % ano contra ano)
+// Ranking de crescimento (barras horizontais - variação % ano contra ano)
 export const dashboardRanking = [
   { regiao: "Nordeste", valor: 22.7 },
   { regiao: "Sudeste", valor: 18.4 },

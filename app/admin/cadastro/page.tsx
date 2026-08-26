@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth"
 import { adminExists } from "@/app/actions/admin"
 import { AdminAuthForm } from "@/components/admin-auth-form"
 
-export const metadata = { title: "Criar acesso — Painel" }
+export const metadata = { title: "Criar acesso - Painel" }
 
 export default async function AdminCadastroPage() {
   const session = await auth.api.getSession({ headers: await headers() })

@@ -24,13 +24,13 @@ const jetbrainsMono = JetBrains_Mono({
 
 const siteUrl = 'https://portfolio-pedromourabarros.vercel.app'
 const description =
-  'Portfólio de Pedro Moura Barros — Analista de Dados e Business Intelligence. SQL, Power BI, DAX, Databricks e ETL transformando dados em decisão estratégica.'
+  'Portfólio de Pedro Moura Barros - Analista de Dados e Business Intelligence. SQL, Power BI, DAX, Databricks e ETL transformando dados em decisão estratégica.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${personal.nome} — ${personal.cargo}`,
-    template: `%s — ${personal.nome}`,
+    default: `${personal.nome} - ${personal.cargo}`,
+    template: `%s - ${personal.nome}`,
   },
   description,
   keywords: [
@@ -53,14 +53,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'pt_BR',
     url: siteUrl,
-    title: `${personal.nome} — ${personal.cargo}`,
+    title: `${personal.nome} - ${personal.cargo}`,
     description,
     siteName: `${personal.nome} · Portfólio`,
-    images: [{ url: '/og.png', width: 1200, height: 630, alt: `${personal.nome} — ${personal.cargo}` }],
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: `${personal.nome} - ${personal.cargo}` }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${personal.nome} — ${personal.cargo}`,
+    title: `${personal.nome} - ${personal.cargo}`,
     description,
     images: ['/og.png'],
   },
