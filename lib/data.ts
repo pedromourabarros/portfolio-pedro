@@ -220,7 +220,7 @@ export const projetos: Projeto[] = [
     resumo:
       "Modelo preditivo que projeta a receita dos próximos meses a partir do histórico de vendas, com faixa de confiança para o planejamento orçamentário.",
     problema:
-      "O planejamento de orçamento e metas era feito só com base em médias simples do histórico, sem considerar sazonalidade e tendência — gerando metas mal calibradas e surpresas no fechamento do mês.",
+      "O planejamento de orçamento e metas era feito só com base em médias simples do histórico, sem considerar sazonalidade e tendência. Isso gerava metas mal calibradas e surpresas no fechamento do mês.",
     solucao:
       "Um modelo de séries temporais que aprende o padrão sazonal e de tendência da receita e projeta os próximos meses com uma faixa de confiança, permitindo que a área comercial planeje metas realistas com antecedência.",
     arquitetura:

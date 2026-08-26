@@ -380,7 +380,7 @@ export function Dashboard() {
               Um Power BI vivo, <span className="text-gradient-accent">reconstruído em código</span>
             </>
           }
-          description="Amostra interativa do tipo de leitura executiva que entrego no dia a dia: KPIs, séries temporais, quebra por canal, ranking regional e a consulta SQL por trás dos números — tudo com filtros aplicados em tempo real. Dados ilustrativos."
+          description="Amostra interativa do tipo de leitura executiva que entrego no dia a dia: KPIs, séries temporais, quebra por canal, ranking regional e a consulta SQL por trás dos números, tudo com filtros aplicados em tempo real. Dados ilustrativos."
         />
 
         {/* Barra de filtros (pills) — separada por eixo: período e região */}
