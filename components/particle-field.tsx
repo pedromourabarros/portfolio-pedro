@@ -29,11 +29,22 @@ export function ParticleField({ className = "" }: { className?: string }) {
     const mouse = { x: -9999, y: -9999 }
     let rafId = 0
     let running = false
+    // rect do canvas em cache: evita ler getBoundingClientRect() (que força
+    // reflow) a cada mousemove; só atualiza em resize e scroll.
+    let canvasRect = { left: 0, top: 0 }
+    // limita a ~30fps: metade das renderizações, sem diferença visual perceptível
+    const FRAME_MS = 1000 / 30
+    let lastFrame = Number.NEGATIVE_INFINITY
     // distâncias comparadas ao quadrado (evita Math.sqrt no laço quente)
     const LINK = 120
     const LINK_SQ = LINK * LINK
     const PULL = 150
     const PULL_SQ = PULL * PULL
+
+    function cacheRect() {
+      const r = el.getBoundingClientRect()
+      canvasRect = { left: r.left, top: r.top }
+    }
 
     function resize() {
       const parent = el.parentElement
@@ -59,7 +70,12 @@ export function ParticleField({ className = "" }: { className?: string }) {
       }))
     }
 
-    function draw() {
+    function draw(now = 0) {
+      rafId = requestAnimationFrame(draw)
+      // pula frames para manter ~30fps
+      if (now - lastFrame < FRAME_MS) return
+      lastFrame = now
+
       context.clearRect(0, 0, width, height)
 
       for (let i = 0; i < particles.length; i++) {
@@ -102,8 +118,6 @@ export function ParticleField({ className = "" }: { className?: string }) {
           }
         }
       }
-
-      rafId = requestAnimationFrame(draw)
     }
 
     function start() {
@@ -117,9 +131,8 @@ export function ParticleField({ className = "" }: { className?: string }) {
     }
 
     function onMove(e: MouseEvent) {
-      const rect = el.getBoundingClientRect()
-      mouse.x = e.clientX - rect.left
-      mouse.y = e.clientY - rect.top
+      mouse.x = e.clientX - canvasRect.left
+      mouse.y = e.clientY - canvasRect.top
     }
     function onLeave() {
       mouse.x = -9999
@@ -127,7 +140,13 @@ export function ParticleField({ className = "" }: { className?: string }) {
     }
 
     resize()
-    window.addEventListener("resize", resize)
+    cacheRect()
+    const onResize = () => {
+      resize()
+      cacheRect()
+    }
+    window.addEventListener("resize", onResize)
+    window.addEventListener("scroll", cacheRect, { passive: true })
 
     if (prefersReduced) {
       // frame único estático
@@ -156,7 +175,8 @@ export function ParticleField({ className = "" }: { className?: string }) {
       document.addEventListener("visibilitychange", onVisibility)
 
       return () => {
-        window.removeEventListener("resize", resize)
+        window.removeEventListener("resize", onResize)
+        window.removeEventListener("scroll", cacheRect)
         window.removeEventListener("mousemove", onMove)
         window.removeEventListener("mouseout", onLeave)
         document.removeEventListener("visibilitychange", onVisibility)
@@ -166,7 +186,8 @@ export function ParticleField({ className = "" }: { className?: string }) {
     }
 
     return () => {
-      window.removeEventListener("resize", resize)
+      window.removeEventListener("resize", onResize)
+      window.removeEventListener("scroll", cacheRect)
       cancelAnimationFrame(rafId)
     }
   }, [])
