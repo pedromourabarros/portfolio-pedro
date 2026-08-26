@@ -188,6 +188,54 @@ export const projetos: Projeto[] = [
     destaque: true,
   },
   {
+    titulo: "Segmentação RFM de Clientes",
+    categoria: "Data Science · Clusterização",
+    resumo:
+      "Segmentação de base de clientes com metodologia RFM e K-Means para direcionar campanhas por perfil de valor e risco de churn.",
+    problema:
+      "A área de marketing tratava toda a base de clientes de forma homogênea, disparando as mesmas campanhas para perfis muito diferentes de valor e engajamento — desperdiçando orçamento e reduzindo conversão.",
+    solucao:
+      "Construção de um modelo de segmentação combinando análise RFM (Recência, Frequência, Monetário) com clusterização K-Means, classificando cada cliente em perfis como Campeões, Fiéis, Em risco e Inativos para orientar ações comerciais específicas por segmento.",
+    arquitetura:
+      "Extração e tratamento de dados transacionais via SQL, engenharia de atributos e padronização com Pandas/Scikit-learn em Python, escolha do número ideal de clusters via método do cotovelo e silhouette score, e exportação dos segmentos para consumo no Power BI.",
+    desafios:
+      "Tratar outliers de clientes de altíssimo ticket sem distorcer os clusters, validar a estabilidade dos grupos ao longo do tempo e traduzir os clusters estatísticos em rótulos de negócio compreensíveis para o time comercial.",
+    impacto:
+      "Base de clientes reclassificada em 5 segmentos acionáveis, servindo de insumo direto para campanhas de retenção e upsell direcionadas por perfil de valor.",
+    metricas: [
+      { valor: "5 clusters", label: "Segmentos de clientes" },
+      { valor: "RFM", label: "Metodologia aplicada" },
+      { valor: "K-Means", label: "Algoritmo de clusterização" },
+    ],
+    stack: ["Python", "Pandas", "Scikit-learn", "SQL", "Power BI", "Jupyter"],
+    imagem: "/projetos/segmentacao-rfm.png",
+    destaque: true,
+  },
+  {
+    titulo: "Pipeline de ETL Automatizado",
+    categoria: "Data Engineering",
+    resumo:
+      "Pipeline de extração, tratamento e carga de dados orquestrado para alimentar dashboards com dados sempre atualizados e validados.",
+    problema:
+      "A atualização das bases usadas nos dashboards executivos era manual, sujeita a erros de digitação e atrasos que comprometiam a confiabilidade das análises entregues às áreas de negócio.",
+    solucao:
+      "Um pipeline de ETL automatizado que extrai dados de múltiplas fontes, aplica regras de limpeza, deduplicação e validação de integridade, e carrega o resultado em um schema consolidado pronto para consumo analítico.",
+    arquitetura:
+      "Scripts Python para extração e transformação, camada de staging em SQL para validação de tipos e integridade referencial, execução agendada em ambiente Databricks e logs estruturados para rastreabilidade de cada carga.",
+    desafios:
+      "Lidar com schemas inconsistentes entre fontes de origem, garantir idempotência das cargas para evitar duplicidade em reprocessamentos e manter o tempo de execução baixo mesmo com o crescimento do volume de dados.",
+    impacto:
+      "Redução do tempo de atualização das bases de horas para minutos, com validação automática de integridade e eliminação de retrabalho manual nas rotinas de carga.",
+    metricas: [
+      { valor: "98,7%", label: "Taxa de sucesso nas cargas" },
+      { valor: "1,2M+", label: "Linhas processadas por execução" },
+      { valor: "Automático", label: "Agendamento e validação" },
+    ],
+    stack: ["Python", "SQL", "Databricks", "ETL", "Pandas"],
+    imagem: "/projetos/pipeline-etl.png",
+    destaque: true,
+  },
+  {
     titulo: "Calculadora Financeira",
     categoria: "Aplicação Web",
     resumo:

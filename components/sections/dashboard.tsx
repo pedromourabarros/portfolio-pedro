@@ -16,7 +16,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
-import { TrendingUp } from "lucide-react"
+import { Sparkles, Terminal, TrendingUp } from "lucide-react"
 import {
   ChartContainer,
   ChartTooltip,
@@ -123,6 +123,109 @@ function kpisFor(filtro: Filtro, receitaData: typeof dashboardReceita): Kpi[] {
   ]
 }
 
+// Consulta SQL "real" por trás da visualização — reage ao filtro selecionado
+function sqlFor(filtro: Filtro): string {
+  const janela = filtro === "6 meses" ? "6" : filtro === "Trimestre" ? "3" : "12"
+  const lines = [
+    "SELECT",
+    "  DATE_TRUNC('month', data_venda) AS mes,",
+    "  SUM(valor_venda)                AS receita,",
+    "  SUM(meta_mensal)                AS meta",
+    "FROM vendas.fato_vendas",
+    `WHERE data_venda >= DATEADD(month, -${janela}, CURRENT_DATE)`,
+  ]
+  if (isRegion(filtro)) lines.push(`  AND regiao = '${filtro}'`)
+  lines.push("GROUP BY 1", "ORDER BY 1;")
+  return lines.join("\n")
+}
+
+const SQL_KEYWORDS = new Set([
+  "SELECT",
+  "FROM",
+  "WHERE",
+  "AND",
+  "GROUP",
+  "BY",
+  "ORDER",
+  "AS",
+  "SUM",
+  "DATE_TRUNC",
+  "DATEADD",
+  "CURRENT_DATE",
+])
+
+function SqlBlock({ sql }: { sql: string }) {
+  return (
+    <pre className="overflow-x-auto rounded-xl bg-background/60 p-4 font-mono text-[13px] leading-relaxed">
+      {sql.split("\n").map((line, i) => (
+        <div key={i}>
+          {line
+            .split(/(\s+|\(|\)|,|'[^']*')/)
+            .filter((t) => t !== "")
+            .map((tok, j) => {
+              if (/^'[^']*'$/.test(tok)) {
+                return (
+                  <span key={j} className="text-mint">
+                    {tok}
+                  </span>
+                )
+              }
+              if (SQL_KEYWORDS.has(tok.trim().toUpperCase())) {
+                return (
+                  <span key={j} className="font-semibold text-primary">
+                    {tok}
+                  </span>
+                )
+              }
+              if (tok === "(" || tok === ")" || tok === ",") {
+                return (
+                  <span key={j} className="text-foreground/60">
+                    {tok}
+                  </span>
+                )
+              }
+              return (
+                <span key={j} className="text-foreground/85">
+                  {tok}
+                </span>
+              )
+            })}
+        </div>
+      ))}
+    </pre>
+  )
+}
+
+// Leitura executiva gerada a partir dos dados filtrados — resume o que mudaria
+// numa reunião de resultados, sem precisar abrir o painel completo.
+function insightsFor(
+  filtro: Filtro,
+  kpis: Kpi[],
+  rankingData: typeof dashboardRanking,
+  categoriasData: typeof dashboardCategorias,
+): string[] {
+  const topRegiao = rankingData[0]
+  const topCanal = [...categoriasData].sort((a, b) => b.valor - a.valor)[0]
+  const atingimento = kpis.find((k) => k.label === "Atingimento de meta")
+  const ticket = kpis.find((k) => k.label === "Ticket médio")
+
+  const insights = [
+    `${topRegiao.regiao} lidera o crescimento (+${topRegiao.valor.toFixed(1).replace(".", ",")}% a/a) e sustenta boa parte do avanço de receita no período.`,
+    `${topCanal.categoria} concentra ${topCanal.valor}% do mix de canais — segue como a principal via de aquisição a monitorar.`,
+  ]
+  if (atingimento) {
+    insights.push(
+      `Atingimento de meta em ${atingimento.valor}, ${atingimento.positivo ? "acima" : "abaixo"} do esperado para ${isRegion(filtro) ? filtro : filtro.toLowerCase()}.`,
+    )
+  }
+  if (ticket) {
+    insights.push(
+      `Ticket médio em ${ticket.valor}, variação de +${ticket.delta.toFixed(1).replace(".", ",")}% vs. o período anterior.`,
+    )
+  }
+  return insights
+}
+
 function Panel({
   title,
   subtitle,
@@ -199,6 +302,11 @@ export function Dashboard() {
   }, [filtro])
 
   const maxRanking = Math.max(...rankingData.map((r) => r.valor))
+  const sql = useMemo(() => sqlFor(filtro), [filtro])
+  const insights = useMemo(
+    () => insightsFor(filtro, kpis, rankingData, categoriasData),
+    [filtro, kpis, rankingData, categoriasData],
+  )
 
   return (
     <section id="dashboard" className="relative py-24 sm:py-32">
@@ -211,7 +319,7 @@ export function Dashboard() {
               Um Power BI vivo, <span className="text-gradient-accent">reconstruído em código</span>
             </>
           }
-          description="Amostra interativa do tipo de leitura executiva que entrego no dia a dia: KPIs, séries temporais, quebra por canal e ranking regional com filtros aplicados em tempo real. Dados ilustrativos."
+          description="Amostra interativa do tipo de leitura executiva que entrego no dia a dia: KPIs, séries temporais, quebra por canal, ranking regional e a consulta SQL por trás dos números — tudo com filtros aplicados em tempo real. Dados ilustrativos."
         />
 
         {/* Barra de filtros (pills) */}
@@ -372,16 +480,25 @@ export function Dashboard() {
           </Panel>
         </div>
 
-        {/* Linha 2: Receita por região (barras) + Ranking de crescimento */}
+        {/* Linha 2: Receita por região (barras, clicáveis) + Ranking de crescimento */}
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          <Panel title="Receita por região" subtitle="Em milhares de reais">
+          <Panel title="Receita por região" subtitle="Em milhares de reais · clique numa barra para filtrar">
             <ChartContainer config={regioesConfig} className="aspect-[16/9] w-full">
               <BarChart data={regioesData} margin={{ left: -12, right: 8, top: 8 }}>
                 <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="var(--border)" />
                 <XAxis dataKey="regiao" tickLine={false} axisLine={false} tickMargin={8} fontSize={11} />
                 <YAxis tickLine={false} axisLine={false} tickMargin={8} fontSize={12} width={40} />
                 <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                <Bar dataKey="valor" radius={[6, 6, 0, 0]} barSize={40}>
+                <Bar
+                  dataKey="valor"
+                  radius={[6, 6, 0, 0]}
+                  barSize={40}
+                  className="cursor-pointer"
+                  onClick={(data) => {
+                    const regiao = (data as unknown as { payload?: { regiao?: Filtro } })?.payload?.regiao
+                    if (regiao) setFiltro(regiao === filtro ? "12 meses" : regiao)
+                  }}
+                >
                   {regioesData.map((r, i) => (
                     <Cell
                       key={r.regiao}
@@ -420,6 +537,47 @@ export function Dashboard() {
                 )
               })}
             </ul>
+          </Panel>
+        </div>
+
+        {/* Linha 3: Insights automáticos + Consulta SQL — a camada técnica por trás do painel */}
+        <div className="mt-6 grid gap-6 lg:grid-cols-5">
+          <Panel
+            title="Insights automáticos"
+            subtitle="Leitura executiva gerada a partir do recorte atual"
+            className="lg:col-span-2"
+          >
+            <div className="mb-1 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-primary">
+              <Sparkles className="size-3" />
+              Atualizado com o filtro
+            </div>
+            <ul className="mt-4 flex flex-col gap-3.5">
+              {insights.map((texto, i) => (
+                <motion.li
+                  key={texto}
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.06 }}
+                  className="flex gap-2.5 text-sm leading-relaxed text-muted-foreground"
+                >
+                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
+                  <span>{texto}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </Panel>
+
+          <Panel
+            title="Consulta SQL"
+            subtitle="A query que gera a série de receita x meta acima"
+            className="lg:col-span-3"
+            delay={0.1}
+          >
+            <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-secondary/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              <Terminal className="size-3" />
+              vendas.fato_vendas
+            </div>
+            <SqlBlock sql={sql} />
           </Panel>
         </div>
       </div>
