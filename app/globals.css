@@ -136,6 +136,7 @@
   }
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px;
     -webkit-font-smoothing: antialiased;
   }
   body {
@@ -264,17 +265,36 @@
   }
 }
 
+/* Deriva leve dos orbs — SOMENTE translate, para o compositor não precisar
+   re-rasterizar a superfície borrada a cada frame (blur estático = barato). */
 @keyframes aurora-drift {
   0%,
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
-  33% {
-    transform: translate(4%, -3%) scale(1.1);
+  50% {
+    transform: translate3d(3%, -2%, 0);
   }
-  66% {
-    transform: translate(-3%, 2%) scale(0.95);
+}
+
+@keyframes aurora-drift-rev {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
   }
+  50% {
+    transform: translate3d(-3%, 2%, 0);
+  }
+}
+
+.aurora-orb {
+  will-change: transform;
+  animation: aurora-drift 26s ease-in-out infinite;
+}
+
+.aurora-orb-rev {
+  will-change: transform;
+  animation: aurora-drift-rev 32s ease-in-out infinite;
 }
 
 @keyframes float-slow {

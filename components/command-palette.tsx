@@ -30,8 +30,8 @@ type Item = {
   run: () => void
 }
 
-// Simula um clique real em uma âncora "#id" para reaproveitar a ponte de
-// smooth-scroll (Lenis) já registrada em components/smooth-scroll.tsx.
+// Navega para uma âncora "#id" usando o scroll suave nativo do navegador
+// (scroll-behavior: smooth + scroll-padding-top definidos no globals.css).
 function goTo(href: string) {
   const a = document.createElement("a")
   a.href = href

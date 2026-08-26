@@ -16,20 +16,37 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0e14",
-          borderRadius: 7,
+          background: "linear-gradient(140deg, #16b3a6 0%, #0c6f68 100%)",
+          borderRadius: 8,
+          position: "relative",
         }}
       >
+        {/* Monograma P */}
         <div
           style={{
-            display: "flex",
-            alignItems: "flex-end",
-            gap: 3,
+            fontSize: 22,
+            fontWeight: 800,
+            color: "#04121a",
+            lineHeight: 1,
+            letterSpacing: -1,
           }}
         >
-          <div style={{ width: 4, height: 9, background: "#1fb6a8", borderRadius: 1 }} />
-          <div style={{ width: 4, height: 15, background: "#22d3c5", borderRadius: 1 }} />
-          <div style={{ width: 4, height: 21, background: "#5eead4", borderRadius: 1 }} />
+          P
+        </div>
+        {/* Sparkline ascendente na base (remete a dados) */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 4,
+            left: 5,
+            display: "flex",
+            alignItems: "flex-end",
+            gap: 2,
+          }}
+        >
+          <div style={{ width: 2, height: 3, background: "#04121a", opacity: 0.55, borderRadius: 1 }} />
+          <div style={{ width: 2, height: 5, background: "#04121a", opacity: 0.7, borderRadius: 1 }} />
+          <div style={{ width: 2, height: 8, background: "#04121a", opacity: 0.85, borderRadius: 1 }} />
         </div>
       </div>
     ),

@@ -16,19 +16,35 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0e14",
+          background: "linear-gradient(140deg, #16b3a6 0%, #0c6f68 100%)",
+          borderRadius: 40,
+          position: "relative",
         }}
       >
         <div
           style={{
-            display: "flex",
-            alignItems: "flex-end",
-            gap: 16,
+            fontSize: 122,
+            fontWeight: 800,
+            color: "#04121a",
+            lineHeight: 1,
+            letterSpacing: -4,
           }}
         >
-          <div style={{ width: 22, height: 50, background: "#1fb6a8", borderRadius: 6 }} />
-          <div style={{ width: 22, height: 84, background: "#22d3c5", borderRadius: 6 }} />
-          <div style={{ width: 22, height: 118, background: "#5eead4", borderRadius: 6 }} />
+          P
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: 28,
+            left: 32,
+            display: "flex",
+            alignItems: "flex-end",
+            gap: 9,
+          }}
+        >
+          <div style={{ width: 10, height: 16, background: "#04121a", opacity: 0.55, borderRadius: 3 }} />
+          <div style={{ width: 10, height: 28, background: "#04121a", opacity: 0.7, borderRadius: 3 }} />
+          <div style={{ width: 10, height: 44, background: "#04121a", opacity: 0.85, borderRadius: 3 }} />
         </div>
       </div>
     ),

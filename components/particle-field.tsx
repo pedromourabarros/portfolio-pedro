@@ -19,16 +19,21 @@ export function ParticleField({ className = "" }: { className?: string }) {
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
     const ctx = canvas.getContext("2d")
     if (!ctx) return
-    // Locais garantidamente não-nulos para uso dentro das funções aninhadas.
     const el: HTMLCanvasElement = canvas
     const context: CanvasRenderingContext2D = ctx
 
     let width = 0
     let height = 0
-    let dpr = Math.min(window.devicePixelRatio || 1, 2)
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.5)
     let particles: Particle[] = []
     const mouse = { x: -9999, y: -9999 }
     let rafId = 0
+    let running = false
+    // distâncias comparadas ao quadrado (evita Math.sqrt no laço quente)
+    const LINK = 120
+    const LINK_SQ = LINK * LINK
+    const PULL = 150
+    const PULL_SQ = PULL * PULL
 
     function resize() {
       const parent = el.parentElement
@@ -36,20 +41,21 @@ export function ParticleField({ className = "" }: { className?: string }) {
       const rect = parent.getBoundingClientRect()
       width = rect.width
       height = rect.height
-      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5)
       el.width = width * dpr
       el.height = height * dpr
       el.style.width = `${width}px`
       el.style.height = `${height}px`
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-      const count = Math.min(90, Math.floor((width * height) / 14000))
+      // Densidade reduzida: menos partículas => laço de conexões O(n²) bem menor.
+      const count = Math.min(48, Math.floor((width * height) / 26000))
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        r: Math.random() * 1.6 + 0.6,
+        vx: (Math.random() - 0.5) * 0.22,
+        vy: (Math.random() - 0.5) * 0.22,
+        r: Math.random() * 1.5 + 0.6,
       }))
     }
 
@@ -64,29 +70,33 @@ export function ParticleField({ className = "" }: { className?: string }) {
         if (p.x < 0 || p.x > width) p.vx *= -1
         if (p.y < 0 || p.y > height) p.vy *= -1
 
-        // gentle attraction to mouse
-        const dx = mouse.x - p.x
-        const dy = mouse.y - p.y
-        const dist = Math.hypot(dx, dy)
-        if (dist < 160) {
-          p.x += (dx / dist) * 0.4
-          p.y += (dy / dist) * 0.4
+        // atração suave ao cursor
+        const dxm = mouse.x - p.x
+        const dym = mouse.y - p.y
+        const distSqM = dxm * dxm + dym * dym
+        if (distSqM < PULL_SQ) {
+          const d = Math.sqrt(distSqM) || 1
+          p.x += (dxm / d) * 0.35
+          p.y += (dym / d) * 0.35
         }
 
         context.beginPath()
         context.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        context.fillStyle = `oklch(0.85 0.13 195 / ${0.5})`
+        context.fillStyle = "oklch(0.85 0.13 195 / 0.5)"
         context.fill()
 
-        // connections
+        // conexões (usa distância ao quadrado; só calcula sqrt quando conecta)
         for (let j = i + 1; j < particles.length; j++) {
           const q = particles[j]
-          const d = Math.hypot(p.x - q.x, p.y - q.y)
-          if (d < 120) {
+          const dx = p.x - q.x
+          const dy = p.y - q.y
+          const dSq = dx * dx + dy * dy
+          if (dSq < LINK_SQ) {
+            const alpha = 0.12 * (1 - Math.sqrt(dSq) / LINK)
             context.beginPath()
             context.moveTo(p.x, p.y)
             context.lineTo(q.x, q.y)
-            context.strokeStyle = `oklch(0.8 0.12 195 / ${0.12 * (1 - d / 120)})`
+            context.strokeStyle = `oklch(0.8 0.12 195 / ${alpha})`
             context.lineWidth = 1
             context.stroke()
           }
@@ -94,6 +104,16 @@ export function ParticleField({ className = "" }: { className?: string }) {
       }
 
       rafId = requestAnimationFrame(draw)
+    }
+
+    function start() {
+      if (running || prefersReduced) return
+      running = true
+      rafId = requestAnimationFrame(draw)
+    }
+    function stop() {
+      running = false
+      cancelAnimationFrame(rafId)
     }
 
     function onMove(e: MouseEvent) {
@@ -108,23 +128,54 @@ export function ParticleField({ className = "" }: { className?: string }) {
 
     resize()
     window.addEventListener("resize", resize)
-    if (!prefersReduced) {
-      window.addEventListener("mousemove", onMove)
-      window.addEventListener("mouseout", onLeave)
-      rafId = requestAnimationFrame(draw)
-    } else {
-      // static single frame
+
+    if (prefersReduced) {
+      // frame único estático
       draw()
       cancelAnimationFrame(rafId)
+    } else {
+      window.addEventListener("mousemove", onMove, { passive: true })
+      window.addEventListener("mouseout", onLeave, { passive: true })
+
+      // Só anima enquanto o campo está visível na viewport.
+      const parent = el.parentElement
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries[0]?.isIntersecting) start()
+          else stop()
+        },
+        { threshold: 0 },
+      )
+      if (parent) io.observe(parent)
+
+      // Pausa quando a aba não está ativa.
+      const onVisibility = () => {
+        if (document.hidden) stop()
+        else if (isInView(parent)) start()
+      }
+      document.addEventListener("visibilitychange", onVisibility)
+
+      return () => {
+        window.removeEventListener("resize", resize)
+        window.removeEventListener("mousemove", onMove)
+        window.removeEventListener("mouseout", onLeave)
+        document.removeEventListener("visibilitychange", onVisibility)
+        io.disconnect()
+        stop()
+      }
     }
 
     return () => {
       window.removeEventListener("resize", resize)
-      window.removeEventListener("mousemove", onMove)
-      window.removeEventListener("mouseout", onLeave)
       cancelAnimationFrame(rafId)
     }
   }, [])
 
   return <canvas ref={canvasRef} className={className} aria-hidden="true" />
+}
+
+function isInView(el: HTMLElement | null) {
+  if (!el) return false
+  const r = el.getBoundingClientRect()
+  return r.bottom > 0 && r.top < window.innerHeight
 }
