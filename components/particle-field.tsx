@@ -29,10 +29,7 @@ export function ParticleField({ className = "" }: { className?: string }) {
     const mouse = { x: -9999, y: -9999 }
     let rafId = 0
     let running = false
-    // rect do canvas em cache: evita ler getBoundingClientRect() (que força
-    // reflow) a cada mousemove; só atualiza em resize e scroll.
     let canvasRect = { left: 0, top: 0 }
-    // limita a ~30fps: metade das renderizações, sem diferença visual perceptível
     const FRAME_MS = 1000 / 30
     let lastFrame = Number.NEGATIVE_INFINITY
     // distâncias comparadas ao quadrado (evita Math.sqrt no laço quente)
@@ -59,7 +56,6 @@ export function ParticleField({ className = "" }: { className?: string }) {
       el.style.height = `${height}px`
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-      // Densidade reduzida: menos partículas => laço de conexões O(n²) bem menor.
       const count = Math.min(48, Math.floor((width * height) / 26000))
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * width,
@@ -72,7 +68,6 @@ export function ParticleField({ className = "" }: { className?: string }) {
 
     function draw(now = 0) {
       rafId = requestAnimationFrame(draw)
-      // pula frames para manter ~30fps
       if (now - lastFrame < FRAME_MS) return
       lastFrame = now
 
