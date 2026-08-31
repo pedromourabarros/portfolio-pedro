@@ -1,33 +1,94 @@
-# portfolio-pedro
+# Pedro Moura Barros
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+Portfólio pessoal de Pedro Moura Barros, com foco em análise de dados, Business Intelligence e desenvolvimento de soluções para transformar informação em decisões mais claras.
 
-## Built with v0
+O site reúne experiências profissionais, projetos, formação, um dashboard interativo e uma área de contato.
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+## Stack
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_eOzh71J1u9IJeen7zTxYcDCoWzLk)
+- Next.js 16 com App Router
+- React 19 e TypeScript
+- Tailwind CSS 4
+- Motion para animações de interface
+- Recharts para gráficos
+- Better Auth para autenticação do painel administrativo
+- Neon Postgres com Drizzle ORM
+- Vercel Analytics
 
-## Getting Started
+## Rodando localmente
 
-First, run the development server:
+Você precisa ter Node.js e pnpm instalados.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Depois, abra [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Para conferir a versão de produção localmente:
 
-## Learn More
+```bash
+pnpm build
+pnpm start
+```
 
-To learn more, take a look at the following resources:
+## Variáveis de ambiente
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+Crie um arquivo `.env.local` na raiz do projeto com as variáveis usadas pelo ambiente:
+
+```env
+DATABASE_URL=
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=
+```
+
+`BETTER_AUTH_SECRET` deve ser uma chave aleatória com pelo menos 32 caracteres. Nunca publique esse arquivo ou qualquer credencial no repositório.
+
+## Estrutura
+
+```text
+app/
+  api/auth/        Rotas da autenticação
+  admin/           Área administrativa
+  layout.tsx       Layout e metadados globais
+  page.tsx         Página principal
+components/
+  sections/        Seções do portfólio
+  ui/              Componentes de interface reutilizáveis
+lib/
+  data.ts          Conteúdo do portfólio
+  knowledge.ts     Conteúdo usado pelo PedroGPT
+  auth.ts          Configuração do Better Auth
+  db/              Conexão e schema do banco
+public/             Imagens e arquivos estáticos
+```
+
+## Scripts
+
+| Comando | O que faz |
+| --- | --- |
+| `pnpm dev` | Inicia o servidor de desenvolvimento |
+| `pnpm build` | Gera a build de produção |
+| `pnpm start` | Executa a build de produção |
+| `pnpm lint` | Verifica problemas de lint |
+
+## Conteúdo
+
+Os textos, experiências, projetos e informações de contato ficam concentrados em `lib/data.ts`. Isso facilita atualizar o portfólio sem espalhar conteúdo pelos componentes.
+
+O dashboard usa dados ilustrativos para demonstrar filtros, gráficos e consultas SQL. Ele não representa dados reais de clientes ou empresas.
+
+## Deploy
+
+O projeto pode ser publicado na Vercel conectado ao repositório. Antes do deploy, confira as variáveis de ambiente do projeto e execute a build localmente.
+
+## Licença
+
+O código da interface está disponível para estudo e referência. O conteúdo pessoal, as imagens e a identidade visual pertencem a Pedro Moura Barros.
+
+## Contato
+
+- LinkedIn: [linkedin.com/in/pedromourabarros](https://www.linkedin.com/in/pedromourabarros/)
+- GitHub: [github.com/pedromourabarros](https://github.com/pedromourabarros)
+- Site: [pedromourabarros.vercel.app](https://pedromourabarros.vercel.app)
